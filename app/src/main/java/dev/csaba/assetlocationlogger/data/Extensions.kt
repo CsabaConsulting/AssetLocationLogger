@@ -13,7 +13,7 @@ fun FragmentActivity.getSecondaryFirebaseConfiguration(): FirebaseProjectConfigu
     val preferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
     return FirebaseProjectConfiguration(
         getPreferenceString(preferences, "project_id"),
-        getPreferenceString(preferences, "app_id"),
+        getPreferenceString(preferences, "application_id"),
         getPreferenceString(preferences, "api_key")
     )
 }
