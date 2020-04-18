@@ -1,19 +1,32 @@
 package dev.csaba.assetlocationlogger.ui
 
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-//import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.FirebaseOptions
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.FirebaseFirestoreSettings
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.ktx.app
+import com.google.firebase.ktx.initialize
 import kotlinx.android.synthetic.main.activity_main.*
 import dev.csaba.assetlocationlogger.R
+import dev.csaba.assetlocationlogger.data.getSecondaryFirebaseConfiguration
 import dev.csaba.assetlocationlogger.ui.adapter.OnAssetClickListener
 import dev.csaba.assetlocationlogger.ui.adapter.AssetAdapter
 import dev.csaba.assetlocationlogger.viewmodel.MainViewModel
 
 
 class MainActivity : AppCompatActivity(), OnAssetClickListener {
+
+    companion object {
+        private const val TAG = "FirestoreAssetRepo"
+    }
 
     private lateinit var viewModel: MainViewModel
     private val assetAdapter = AssetAdapter(this)
@@ -24,16 +37,46 @@ class MainActivity : AppCompatActivity(), OnAssetClickListener {
         recycler.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         recycler.adapter = assetAdapter
 
-//        viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
-        viewModel = MainViewModel(this)
+        val projectConfiguration = this.getSecondaryFirebaseConfiguration()
+        val options = FirebaseOptions.Builder()
+            .setProjectId(projectConfiguration.projectId)
+            .setApplicationId(projectConfiguration.applicationId)
+            .setApiKey(projectConfiguration.apiKey)
+            .build()
 
-        viewModel.assetList.observe(this, Observer {
-            assetAdapter.setItems(it)
-        })
+        // Initialize secondary FirebaseApp.
+        Firebase.initialize(applicationContext, options, "secondary")
+        val secondaryApp = Firebase.app("secondary")
+        // Get FireStore for the other app.
+        val secondaryDB = FirebaseFirestore.getInstance(secondaryApp).apply {
+            firestoreSettings = FirebaseFirestoreSettings.Builder()
+                .setPersistenceEnabled(true)
+                .build()
+        }
 
-        addAsset.setOnClickListener {
-            viewModel.addAsset(assetTitle.text.toString())
-            assetTitle.text?.clear()
+        val auth = FirebaseAuth.getInstance(secondaryApp)
+        if (auth.currentUser == null) {
+            auth.signInAnonymously()
+                .addOnCompleteListener(this) { task ->
+                    if (task.isSuccessful) {
+                        Log.d(TAG, "signInAnonymously:success")
+
+                        viewModel = MainViewModel(secondaryDB)
+
+                        viewModel.assetList.observe(this, Observer {
+                            assetAdapter.setItems(it)
+                        })
+
+                        addAsset.setOnClickListener {
+                            viewModel.addAsset(assetTitle.text.toString())
+                            assetTitle.text?.clear()
+                        }
+                    } else {
+                        Log.w(TAG, "signInAnonymously:failure", task.exception)
+                        Toast.makeText(baseContext, "Authentication failed.",
+                            Toast.LENGTH_SHORT).show()
+                    }
+                }
         }
     }
 

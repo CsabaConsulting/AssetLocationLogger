@@ -1,14 +1,8 @@
 package dev.csaba.assetlocationlogger.data
 
 import android.util.Log
-import androidx.fragment.app.FragmentActivity
-import com.google.firebase.FirebaseOptions
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.FirebaseFirestoreSettings
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.ktx.app
-import com.google.firebase.ktx.initialize
 import dev.csaba.assetlocationlogger.data.remote.RemoteAsset
 import dev.csaba.assetlocationlogger.data.remote.mapToAsset
 import dev.csaba.assetlocationlogger.data.remote.mapToAssetData
@@ -20,7 +14,7 @@ import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 
 
-class FirestoreAssetRepository(activity: FragmentActivity) : IAssetRepository {
+class FirestoreAssetRepository(secondaryDB: FirebaseFirestore) : IAssetRepository {
 
     companion object {
         private const val ASSET_COLLECTION = "Assets"
@@ -28,45 +22,29 @@ class FirestoreAssetRepository(activity: FragmentActivity) : IAssetRepository {
     }
 
     private var remoteDB: FirebaseFirestore
+    private var changeObservable: Observable<List<DocumentSnapshot>>
 
     init {
-        val projectConfiguration = activity.getSecondaryFirebaseConfiguration()
-        val options = FirebaseOptions.Builder()
-            .setProjectId(projectConfiguration.projectId)
-            .setApplicationId(projectConfiguration.appId)
-            .setApiKey(projectConfiguration.apiKey)
-            // setDatabaseURL(...)
-            // setStorageBucket(...)
-            .build()
+        remoteDB = secondaryDB
 
-        // Initialize secondary FirebaseApp.
-        Firebase.initialize(activity.applicationContext, options, "secondary")
-        val secondaryApp = Firebase.app("secondary")
-        // Get FireStore for the other app.
-        remoteDB = FirebaseFirestore.getInstance(secondaryApp).apply {
-            firestoreSettings = FirebaseFirestoreSettings.Builder()
-                .setPersistenceEnabled(true)
-                .build()
+        changeObservable = BehaviorSubject.create { emitter: ObservableEmitter<List<DocumentSnapshot>> ->
+            val listeningRegistration = remoteDB.collection(ASSET_COLLECTION)
+                .addSnapshotListener { value, error ->
+                    if (value == null || error != null) {
+                        return@addSnapshotListener
+                    }
+
+                    if (!emitter.isDisposed) {
+                        emitter.onNext(value.documents)
+                    }
+
+                    value.documentChanges.forEach {
+                        Log.d("FirestoreAssetRepo", "Data changed type ${it.type} document ${it.document.id}")
+                    }
+                }
+
+            emitter.setCancellable { listeningRegistration.remove() }
         }
-    }
-
-    private val changeObservable = BehaviorSubject.create<List<DocumentSnapshot>> { emitter: ObservableEmitter<List<DocumentSnapshot>> ->
-        val listeningRegistration = remoteDB.collection(ASSET_COLLECTION)
-            .addSnapshotListener { value, error ->
-                if (value == null || error != null) {
-                    return@addSnapshotListener
-                }
-
-                if (!emitter.isDisposed) {
-                    emitter.onNext(value.documents)
-                }
-
-                value.documentChanges.forEach {
-                    Log.d("FirestoreAssetRepo", "Data changed type ${it.type} document ${it.document.id}")
-                }
-            }
-
-        emitter.setCancellable { listeningRegistration.remove() }
     }
 
     override fun getAllAssets(): Single<List<Asset>> {

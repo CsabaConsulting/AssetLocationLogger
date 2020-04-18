@@ -43,7 +43,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/assetCreated"
         android:layout_marginEnd="8dp"
-        android:textSize="16dp"
+        android:textSize="16sp"
         android:fontFamily="sans-serif-black"
         tools:text="Long asset name"
         />
@@ -56,7 +56,7 @@
         app:layout_constraintEnd_toStartOf="@id/assetUpdated"
         app:layout_constraintTop_toBottomOf="@id/assetTitle"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:textSize="12dp"
+        android:textSize="12sp"
         android:fontFamily="sans-serif"
         tools:text="10.12.2018 22:33"
         />
@@ -69,7 +69,7 @@
         app:layout_constraintEnd_toEndOf="@id/assetTitle"
         app:layout_constraintTop_toBottomOf="@id/assetTitle"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:textSize="12dp"
+        android:textSize="12sp"
         android:fontFamily="sans-serif"
         tools:text="10.12.2018 22:33"
         />

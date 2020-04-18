@@ -1,9 +1,9 @@
 package dev.csaba.assetlocationlogger.viewmodel
 
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.firebase.firestore.FirebaseFirestore
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -13,7 +13,7 @@ import dev.csaba.assetlocationlogger.data.IAssetRepository
 import dev.csaba.assetlocationlogger.data.Asset
 
 
-class MainViewModel(activity: FragmentActivity) : ViewModel() {
+class MainViewModel(secondaryDB: FirebaseFirestore) : ViewModel() {
 
     private val _assetList = MutableLiveData<List<Asset>>()
     val assetList: LiveData<List<Asset>>
@@ -24,7 +24,7 @@ class MainViewModel(activity: FragmentActivity) : ViewModel() {
     private val disposable = CompositeDisposable()
 
     init {
-        repository = FirestoreAssetRepository(activity)
+        repository = FirestoreAssetRepository(secondaryDB)
         repository.getChangeObservable()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe (
