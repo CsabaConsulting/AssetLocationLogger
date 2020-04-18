@@ -1,6 +1,23 @@
 <resources>
-    <string name="app_name">Asset Location Logger</string>
-
+    <string name="app_name">DIY GPS Manager</string>
     <string name="asset_name_hint">Asset name</string>
     <string name="add_button_title">Add</string>
+    <string name="firestore_configuration">Firestore Configuration</string>
+    <string name="firestore_configuration_help">Specify your Firestore project\'s settings. You will store your own data. Click on the title for help.</string>
+    <string name="project_id_title">Project ID</string>
+    <string name="project_id_help">Project ID of your Firebase / Firestore project</string>
+    <string name="application_id_title">Application ID</string>
+    <string name="application_id_help">Application ID of your Firebase / Firestore project</string>
+    <string name="api_key_title">API Key</string>
+    <string name="api_key_help">API Key of your Firebase / Firestore project</string>
+    <string name="settings_help_key">settings_help</string>
+    <string name="settings_help">Create your own Firestore project to store your own data. For detailed explanation see <a href="https://csabaconsulting.github.io/diygpstracker" target="_blank">DIY GPS Tracker</a></string>
+    <string name="settings_button_title">Settings</string>
+    <string name="privacy_button_title">Privacy Policy</string>
+    <string name="help_button_title">Help</string>
+    <string name="connect_key">connect_button</string>
+    <string name="connect">&#xbb;Connect&#xab;</string>
+    <string name="connect_help">Click connect to continue</string>
+    <string name="home_page_url">https://csabaconsulting.github.io/diygpstracker</string>
+    <string name="privacy_policy_url">https://csabaconsulting.github.io/diygpstracker/privacypolicy</string>
 </resources>

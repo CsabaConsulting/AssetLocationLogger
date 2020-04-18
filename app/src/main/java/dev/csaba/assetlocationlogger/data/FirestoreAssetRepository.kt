@@ -1,12 +1,15 @@
 package dev.csaba.assetlocationlogger.data
 
 import android.util.Log
+import com.google.firebase.FirebaseOptions
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.ktx.initialize
 import dev.csaba.assetlocationlogger.data.remote.RemoteAsset
-import dev.csaba.assetlocationlogger.data.remote.mapDateToTimestamp
 import dev.csaba.assetlocationlogger.data.remote.mapToAsset
+import dev.csaba.assetlocationlogger.data.remote.mapToAssetData
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.ObservableEmitter
@@ -19,12 +22,24 @@ class FirestoreAssetRepository : IAssetRepository {
 
     companion object {
         private const val ASSET_COLLECTION = "Assets"
-        private const val ASSET_FIELD_TITLE = "title"
-        private const val ASSET_FIELD_CREATED = "created"
-        private const val ASSET_FIELD_UPDATED = "updated"
     }
 
     private val remoteDB = FirebaseFirestore.getInstance().apply {
+//        val options = FirebaseOptions.Builder()
+//            .setProjectId("my-firebase-project")
+//            .setApplicationId("1:27992087142:android:ce3b6448250083d1")
+//            .setApiKey("AIzaSyADUe90ULnQDuGShD9W23RDP0xmeDc6Mvw")
+//            // setDatabaseURL(...)
+//            // setStorageBucket(...)
+//            .build()
+//
+//        // Initialize secondary FirebaseApp.
+//        Firebase.initialize(this, options, "secondary")
+//        // Retrieve secondary FirebaseApp.
+//        val secondary = Firebase.app("secondary")
+//        // Get the database for the other app.
+//        val secondaryDatabase = Firebase.database(secondary)
+
         firestoreSettings = FirebaseFirestoreSettings.Builder()
             .setPersistenceEnabled(true)
             .build()
@@ -75,14 +90,8 @@ class FirestoreAssetRepository : IAssetRepository {
 
     override fun addAsset(asset: Asset): Completable {
         return Completable.create { emitter ->
-
-            val assetData = HashMap<String, Any>()
-            assetData[ASSET_FIELD_TITLE] = asset.title
-            assetData[ASSET_FIELD_CREATED] = mapDateToTimestamp(asset.created)
-            assetData[ASSET_FIELD_UPDATED] = mapDateToTimestamp(asset.updated)
-
             remoteDB.collection(ASSET_COLLECTION)
-                .add(assetData)
+                .add(mapToAssetData(asset))
                 .addOnSuccessListener {
                     if (!emitter.isDisposed) {
                         emitter.onComplete()
@@ -95,25 +104,6 @@ class FirestoreAssetRepository : IAssetRepository {
                 }
         }
     }
-
-    // second option to add data
-//    override fun addAsset(asset: Asset): Completable {
-//        return Completable.create { emitter ->
-//
-//            remoteDB.collection(ASSET_COLLECTION)
-//                .add(mapToRemoteAsset(asset))
-//                .addOnSuccessListener {
-//                    if (!emitter.isDisposed) {
-//                        emitter.onComplete()
-//                    }
-//                }
-//                .addOnFailureListener {
-//                    if (!emitter.isDisposed) {
-//                        emitter.onError(it)
-//                    }
-//                }
-//        }
-//    }
 
     override fun deleteAsset(assetId: String): Completable {
         return Completable.create { emitter ->
