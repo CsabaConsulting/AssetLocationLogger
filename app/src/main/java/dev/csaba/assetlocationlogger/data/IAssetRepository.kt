@@ -13,4 +13,7 @@ interface IAssetRepository {
     fun deleteAsset(assetId: String): Completable
 
     fun getChangeObservable(): Observable<List<Asset>>
+
+//    fun getAllReports(asset: Asset): Single<List<Report>>
+//    fun addReport(asset: Asset, report: Report): Completable
 }

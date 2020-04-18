@@ -1,11 +1,13 @@
 package dev.csaba.assetlocationlogger.data
 
 import android.util.Log
+import androidx.fragment.app.FragmentActivity
 import com.google.firebase.FirebaseOptions
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.ktx.app
 import com.google.firebase.ktx.initialize
 import dev.csaba.assetlocationlogger.data.remote.RemoteAsset
 import dev.csaba.assetlocationlogger.data.remote.mapToAsset
@@ -18,31 +20,34 @@ import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 
 
-class FirestoreAssetRepository : IAssetRepository {
+class FirestoreAssetRepository(activity: FragmentActivity) : IAssetRepository {
 
     companion object {
         private const val ASSET_COLLECTION = "Assets"
+        private const val REPORT_COLLECTION = "Reports"
     }
 
-    private val remoteDB = FirebaseFirestore.getInstance().apply {
-//        val options = FirebaseOptions.Builder()
-//            .setProjectId("my-firebase-project")
-//            .setApplicationId("1:27992087142:android:ce3b6448250083d1")
-//            .setApiKey("AIzaSyADUe90ULnQDuGShD9W23RDP0xmeDc6Mvw")
-//            // setDatabaseURL(...)
-//            // setStorageBucket(...)
-//            .build()
-//
-//        // Initialize secondary FirebaseApp.
-//        Firebase.initialize(this, options, "secondary")
-//        // Retrieve secondary FirebaseApp.
-//        val secondary = Firebase.app("secondary")
-//        // Get the database for the other app.
-//        val secondaryDatabase = Firebase.database(secondary)
+    private var remoteDB: FirebaseFirestore
 
-        firestoreSettings = FirebaseFirestoreSettings.Builder()
-            .setPersistenceEnabled(true)
+    init {
+        val projectConfiguration = activity.getSecondaryFirebaseConfiguration()
+        val options = FirebaseOptions.Builder()
+            .setProjectId(projectConfiguration.projectId)
+            .setApplicationId(projectConfiguration.appId)
+            .setApiKey(projectConfiguration.apiKey)
+            // setDatabaseURL(...)
+            // setStorageBucket(...)
             .build()
+
+        // Initialize secondary FirebaseApp.
+        Firebase.initialize(activity.applicationContext, options, "secondary")
+        val secondaryApp = Firebase.app("secondary")
+        // Get FireStore for the other app.
+        remoteDB = FirebaseFirestore.getInstance(secondaryApp).apply {
+            firestoreSettings = FirebaseFirestoreSettings.Builder()
+                .setPersistenceEnabled(true)
+                .build()
+        }
     }
 
     private val changeObservable = BehaviorSubject.create<List<DocumentSnapshot>> { emitter: ObservableEmitter<List<DocumentSnapshot>> ->
@@ -127,4 +132,10 @@ class FirestoreAssetRepository : IAssetRepository {
         changeObservable.hide()
             .observeOn(Schedulers.io())
             .map { list -> list.map(::mapDocumentToRemoteAsset).map(::mapToAsset) }
+
+//    override fun getAllReports(asset: Asset): Single<List<Report>> {
+//        return Single.create<List<DocumentSnapshot>> { emitter ->
+//            asset.collection(REPORT_COLLECTION)
+//    }
+
 }

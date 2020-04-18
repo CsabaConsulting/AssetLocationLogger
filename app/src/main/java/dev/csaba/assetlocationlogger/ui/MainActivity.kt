@@ -3,7 +3,7 @@ package dev.csaba.assetlocationlogger.ui
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+//import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_main.*
@@ -24,7 +24,8 @@ class MainActivity : AppCompatActivity(), OnAssetClickListener {
         recycler.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         recycler.adapter = assetAdapter
 
-        viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
+//        viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
+        viewModel = MainViewModel(this)
 
         viewModel.assetList.observe(this, Observer {
             assetAdapter.setItems(it)
