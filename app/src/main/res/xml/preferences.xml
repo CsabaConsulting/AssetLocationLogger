@@ -12,17 +12,17 @@
         android:title="@string/firestore_configuration"
         android:summary="@string/firestore_configuration_help"/>
 
-    <Preference
+    <EditTextPreference
         app:key="project_id"
         app:title="@string/project_id_title"
         app:summary="@string/project_id_help"/>
 
-    <Preference
+    <EditTextPreference
         app:key="application_id"
         app:title="@string/application_id_title"
         app:summary="@string/application_id_help"/>
 
-    <Preference
+    <EditTextPreference
         app:key="api_key"
         app:title="@string/api_key_title"
         app:summary="@string/api_key_help"/>
