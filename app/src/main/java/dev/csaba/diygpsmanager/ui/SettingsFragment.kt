@@ -4,9 +4,11 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.widget.Toast
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import dev.csaba.diygpsmanager.R
+import dev.csaba.diygpsmanager.data.hasConfiguration
 
 
 class SettingsFragment : PreferenceFragmentCompat() {
@@ -28,8 +30,14 @@ class SettingsFragment : PreferenceFragmentCompat() {
             openBrowserWindow(context?.getString(R.string.home_page_url), context)
             return true
         } else if (preference.key == context?.getString(R.string.connect_key)) {
-            val mainPage = Intent(context, MainActivity::class.java)
-            startActivity(mainPage)
+            if (!requireActivity().hasConfiguration()) {
+                Toast.makeText(context,
+                    requireContext().getString(R.string.uncofigured_firestore),
+                    Toast.LENGTH_SHORT).show()
+            } else {
+                val mainPage = Intent(context, MainActivity::class.java)
+                startActivity(mainPage)
+            }
         }
         return false
     }

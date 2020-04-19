@@ -72,7 +72,8 @@ class MainActivity : AppCompatActivityWithActionBar(), OnAssetClickListener {
                         }
                     } else {
                         Log.w(TAG, "signInAnonymously:failure", task.exception)
-                        Toast.makeText(baseContext, "Authentication failed.",
+                        Toast.makeText(baseContext,
+                            applicationContext.getString(R.string.authentication_failed),
                             Toast.LENGTH_SHORT).show()
                     }
                 }
