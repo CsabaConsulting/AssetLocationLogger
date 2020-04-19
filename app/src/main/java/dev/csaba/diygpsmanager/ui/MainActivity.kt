@@ -13,7 +13,10 @@ import com.google.firebase.firestore.FirebaseFirestoreSettings
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.ktx.app
 import com.google.firebase.ktx.initialize
-import kotlinx.android.synthetic.main.activity_main.*
+import dev.csaba.diygpsmanager.ApplicationSingleton
+import kotlinx.android.synthetic.main.activity_main.addAsset
+import kotlinx.android.synthetic.main.activity_main.assetTitle
+import kotlinx.android.synthetic.main.activity_main.recycler
 import dev.csaba.diygpsmanager.R
 import dev.csaba.diygpsmanager.data.getSecondaryFirebaseConfiguration
 import dev.csaba.diygpsmanager.ui.adapter.OnAssetClickListener
@@ -24,7 +27,8 @@ import dev.csaba.diygpsmanager.viewmodel.MainViewModel
 class MainActivity : AppCompatActivityWithActionBar(), OnAssetClickListener {
 
     companion object {
-        private const val TAG = "FirestoreAssetRepo"
+        private const val TAG = "MainActivity"
+        private const val SECONDARY_NAME = "secondary"
     }
 
     private lateinit var viewModel: MainViewModel
@@ -36,40 +40,45 @@ class MainActivity : AppCompatActivityWithActionBar(), OnAssetClickListener {
         recycler.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         recycler.adapter = assetAdapter
 
-        val projectConfiguration = this.getSecondaryFirebaseConfiguration()
-        val options = FirebaseOptions.Builder()
-            .setProjectId(projectConfiguration.projectId)
-            .setApplicationId(projectConfiguration.applicationId)
-            .setApiKey(projectConfiguration.apiKey)
-            .build()
-
-        // Initialize secondary FirebaseApp.
-        Firebase.initialize(applicationContext, options, "secondary")
-        val secondaryApp = Firebase.app("secondary")
-        // Get FireStore for the other app.
-        val secondaryDB = FirebaseFirestore.getInstance(secondaryApp).apply {
-            firestoreSettings = FirebaseFirestoreSettings.Builder()
-                .setPersistenceEnabled(true)
+        val appSingleton = application as ApplicationSingleton
+        // Get or initialize secondary FirebaseApp.
+        if (appSingleton.firebaseApp == null) {
+            val projectConfiguration = this.getSecondaryFirebaseConfiguration()
+            val options = FirebaseOptions.Builder()
+                .setProjectId(projectConfiguration.projectId)
+                .setApplicationId(projectConfiguration.applicationId)
+                .setApiKey(projectConfiguration.apiKey)
                 .build()
-        }
 
-        val auth = FirebaseAuth.getInstance(secondaryApp)
-        if (auth.currentUser == null) {
+            Firebase.initialize(applicationContext, options, SECONDARY_NAME)
+            appSingleton.firebaseApp = Firebase.app(SECONDARY_NAME)
+        }
+        Log.d(TAG, String.format("%d %s",
+            appSingleton.firebaseApp.hashCode(),
+            appSingleton.firebaseApp.toString()
+        ))
+
+        // Get FireStore for the secondary app.
+        if (appSingleton.firestore == null) {
+            appSingleton.firestore = FirebaseFirestore.getInstance(appSingleton.firebaseApp!!).apply {
+                firestoreSettings = FirebaseFirestoreSettings.Builder()
+                    .setPersistenceEnabled(true)
+                    .build()
+            }
+        }
+        Log.d(TAG, String.format("%d %s",
+            appSingleton.firestore.hashCode(),
+            appSingleton.firestore.toString()
+        ))
+
+        // Authenticate
+        val auth = FirebaseAuth.getInstance(appSingleton.firebaseApp!!)
+        if (auth.currentUser == null || auth.currentUser!!.uid.isBlank()) {
             auth.signInAnonymously()
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
                         Log.d(TAG, "signInAnonymously:success")
-
-                        viewModel = MainViewModel(secondaryDB)
-
-                        viewModel.assetList.observe(this, Observer {
-                            assetAdapter.setItems(it)
-                        })
-
-                        addAsset.setOnClickListener {
-                            viewModel.addAsset(assetTitle.text.toString())
-                            assetTitle.text?.clear()
-                        }
+                        populateViewModel(appSingleton.firestore!!)
                     } else {
                         Log.w(TAG, "signInAnonymously:failure", task.exception)
                         Toast.makeText(baseContext,
@@ -77,6 +86,21 @@ class MainActivity : AppCompatActivityWithActionBar(), OnAssetClickListener {
                             Toast.LENGTH_SHORT).show()
                     }
                 }
+        } else {
+            populateViewModel(appSingleton.firestore!!)
+        }
+    }
+
+    private fun populateViewModel(firestore: FirebaseFirestore) {
+        viewModel = MainViewModel(firestore)
+
+        viewModel.assetList.observe(this, Observer {
+            assetAdapter.setItems(it)
+        })
+
+        addAsset.setOnClickListener {
+            viewModel.addAsset(assetTitle.text.toString())
+            assetTitle.text?.clear()
         }
     }
 

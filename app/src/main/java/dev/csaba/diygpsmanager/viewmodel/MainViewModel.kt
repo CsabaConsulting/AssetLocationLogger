@@ -13,7 +13,7 @@ import dev.csaba.diygpsmanager.data.IAssetRepository
 import dev.csaba.diygpsmanager.data.Asset
 
 
-class MainViewModel(secondaryDB: FirebaseFirestore) : ViewModel() {
+class MainViewModel(firestore: FirebaseFirestore) : ViewModel() {
 
     private val _assetList = MutableLiveData<List<Asset>>()
     val assetList: LiveData<List<Asset>>
@@ -24,7 +24,7 @@ class MainViewModel(secondaryDB: FirebaseFirestore) : ViewModel() {
     private val disposable = CompositeDisposable()
 
     init {
-        repository = FirestoreAssetRepository(secondaryDB)
+        repository = FirestoreAssetRepository(firestore)
         repository.getChangeObservable()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe (
