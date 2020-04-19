@@ -1,4 +1,4 @@
-package dev.csaba.assetlocationlogger
+package dev.csaba.diygpsmanager
 
 import androidx.test.InstrumentationRegistry
 import androidx.test.runner.AndroidJUnit4

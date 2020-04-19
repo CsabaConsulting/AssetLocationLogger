@@ -1,4 +1,4 @@
-package dev.csaba.assetlocationlogger.data.remote
+package dev.csaba.diygpsmanager.data.remote
 
 import com.google.firebase.Timestamp
 

@@ -1,4 +1,4 @@
-package dev.csaba.assetlocationlogger.ui
+package dev.csaba.diygpsmanager.ui
 
 import android.content.Intent
 import android.view.Menu

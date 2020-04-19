@@ -1,4 +1,4 @@
-package dev.csaba.assetlocationlogger.data
+package dev.csaba.diygpsmanager.data
 
 import android.content.SharedPreferences
 import androidx.fragment.app.FragmentActivity

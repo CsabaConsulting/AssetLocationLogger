@@ -1,4 +1,4 @@
-package dev.csaba.assetlocationlogger
+package dev.csaba.diygpsmanager
 
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable

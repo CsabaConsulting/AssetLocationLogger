@@ -1,4 +1,4 @@
-package dev.csaba.assetlocationlogger.viewmodel
+package dev.csaba.diygpsmanager.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

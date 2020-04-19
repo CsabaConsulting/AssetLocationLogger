@@ -1,4 +1,4 @@
-package dev.csaba.assetlocationlogger.ui.adapter
+package dev.csaba.diygpsmanager.ui.adapter
 
 import androidx.recyclerview.widget.DiffUtil
 import dev.csaba.assetlocationlogger.data.Asset

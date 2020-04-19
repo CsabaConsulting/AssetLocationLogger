@@ -1,4 +1,4 @@
-package dev.csaba.assetlocationlogger.ui.adapter
+package dev.csaba.diygpsmanager.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.View

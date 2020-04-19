@@ -1,4 +1,4 @@
-package dev.csaba.assetlocationlogger.data
+package dev.csaba.diygpsmanager.data
 
 import android.util.Log
 import com.google.firebase.firestore.DocumentSnapshot

@@ -9,7 +9,7 @@ androidExtensions {
 android {
     compileSdkVersion 29
     defaultConfig {
-        applicationId "dev.csaba.assetlocationlogger"
+        applicationId "dev.csaba.diygpmanager"
         minSdkVersion 21
         targetSdkVersion 29
         versionCode 1
