@@ -1,4 +1,4 @@
-# AssetLocationLogger
+# DIYGPSManager
 Android app to log GPS data to your own Google Forestore back-end.
 You install the Logger app (this app) to the device which is attached to the asset to be tracked.
 There's a companion app which is the Controller and Viewer for the logger app and the back-end.
