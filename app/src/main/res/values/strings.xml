@@ -22,4 +22,5 @@
     <string name="privacy_policy_url">https://csabaconsulting.github.io/diygpstracker/privacypolicy</string>
     <string name="authentication_failed">Authentication failed.</string>
     <string name="uncofigured_firestore">Firestore not condfigured. Please specify Project ID, Application ID, and API Key then connect.</string>
+    <string name="asset_button_title">Asset List</string>
 </resources>
