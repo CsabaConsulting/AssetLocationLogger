@@ -53,10 +53,6 @@ class MainActivity : AppCompatActivityWithActionBar(), OnAssetClickListener {
             Firebase.initialize(applicationContext, options, SECONDARY_NAME)
             appSingleton.firebaseApp = Firebase.app(SECONDARY_NAME)
         }
-        Log.d(TAG, String.format("%d %s",
-            appSingleton.firebaseApp.hashCode(),
-            appSingleton.firebaseApp.toString()
-        ))
 
         // Get FireStore for the secondary app.
         if (appSingleton.firestore == null) {
@@ -66,10 +62,6 @@ class MainActivity : AppCompatActivityWithActionBar(), OnAssetClickListener {
                     .build()
             }
         }
-        Log.d(TAG, String.format("%d %s",
-            appSingleton.firestore.hashCode(),
-            appSingleton.firestore.toString()
-        ))
 
         // Authenticate
         val auth = FirebaseAuth.getInstance(appSingleton.firebaseApp!!)
