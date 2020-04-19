@@ -7,11 +7,10 @@ import android.os.Bundle
 import android.text.method.LinkMovementMethod
 import android.widget.Button
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import dev.csaba.assetlocationlogger.R
 
 
-class StagingActivity : AppCompatActivity() {
+class StagingActivity : AppCompatActivityWithActionBar() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,16 +27,16 @@ class StagingActivity : AppCompatActivity() {
 
         val privacyButton: Button = findViewById(R.id.privacyButton)
         privacyButton.setOnClickListener {
-            openNewTabWindow(applicationContext.getString(R.string.privacy_policy_url), applicationContext)
+            openBrowserWindow(applicationContext.getString(R.string.privacy_policy_url), applicationContext)
         }
 
         val helpButton: Button = findViewById(R.id.helpButton)
         helpButton.setOnClickListener {
-            openNewTabWindow(applicationContext.getString(R.string.home_page_url), applicationContext)
+            openBrowserWindow(applicationContext.getString(R.string.home_page_url), applicationContext)
         }
     }
 
-    private fun openNewTabWindow(url: String?, context: Context) {
+    private fun openBrowserWindow(url: String?, context: Context) {
         val uris = Uri.parse(url)
         val intent = Intent(Intent.ACTION_VIEW, uris)
         val bundle = Bundle()

@@ -14,7 +14,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         setPreferencesFromResource(R.xml.preferences, rootKey)
     }
 
-    fun openNewTabWindow(url: String?, context: Context?) {
+    fun openBrowserWindow(url: String?, context: Context?) {
         val uris = Uri.parse(url)
         val intent = Intent(Intent.ACTION_VIEW, uris)
         val bundle = Bundle()
@@ -25,7 +25,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
     override fun onPreferenceTreeClick(preference: Preference): Boolean {
         if (preference.key == context?.getString(R.string.settings_help_key)) {
-            openNewTabWindow(context?.getString(R.string.home_page_url), context)
+            openBrowserWindow(context?.getString(R.string.home_page_url), context)
             return true
         } else if (preference.key == context?.getString(R.string.connect_key)) {
             val mainPage = Intent(context, MainActivity::class.java)

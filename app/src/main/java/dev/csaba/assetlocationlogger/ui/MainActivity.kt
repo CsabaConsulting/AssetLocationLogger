@@ -3,7 +3,6 @@ package dev.csaba.assetlocationlogger.ui
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -22,7 +21,7 @@ import dev.csaba.assetlocationlogger.ui.adapter.AssetAdapter
 import dev.csaba.assetlocationlogger.viewmodel.MainViewModel
 
 
-class MainActivity : AppCompatActivity(), OnAssetClickListener {
+class MainActivity : AppCompatActivityWithActionBar(), OnAssetClickListener {
 
     companion object {
         private const val TAG = "FirestoreAssetRepo"
