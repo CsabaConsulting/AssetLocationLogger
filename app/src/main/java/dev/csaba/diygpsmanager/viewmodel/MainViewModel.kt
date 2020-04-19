@@ -7,10 +7,10 @@ import com.google.firebase.firestore.FirebaseFirestore
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import dev.csaba.assetlocationlogger.addTo
-import dev.csaba.assetlocationlogger.data.FirestoreAssetRepository
-import dev.csaba.assetlocationlogger.data.IAssetRepository
-import dev.csaba.assetlocationlogger.data.Asset
+import dev.csaba.diygpsmanager.addTo
+import dev.csaba.diygpsmanager.data.FirestoreAssetRepository
+import dev.csaba.diygpsmanager.data.IAssetRepository
+import dev.csaba.diygpsmanager.data.Asset
 
 
 class MainViewModel(secondaryDB: FirebaseFirestore) : ViewModel() {

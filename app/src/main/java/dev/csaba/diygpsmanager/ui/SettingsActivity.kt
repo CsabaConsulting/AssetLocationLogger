@@ -2,7 +2,7 @@ package dev.csaba.diygpsmanager.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import dev.csaba.assetlocationlogger.R
+import dev.csaba.diygpsmanager.R
 
 
 class SettingsActivity : AppCompatActivity() {

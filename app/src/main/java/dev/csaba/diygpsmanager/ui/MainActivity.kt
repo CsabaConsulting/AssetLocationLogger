@@ -14,11 +14,11 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.ktx.app
 import com.google.firebase.ktx.initialize
 import kotlinx.android.synthetic.main.activity_main.*
-import dev.csaba.assetlocationlogger.R
-import dev.csaba.assetlocationlogger.data.getSecondaryFirebaseConfiguration
-import dev.csaba.assetlocationlogger.ui.adapter.OnAssetClickListener
-import dev.csaba.assetlocationlogger.ui.adapter.AssetAdapter
-import dev.csaba.assetlocationlogger.viewmodel.MainViewModel
+import dev.csaba.diygpsmanager.R
+import dev.csaba.diygpsmanager.data.getSecondaryFirebaseConfiguration
+import dev.csaba.diygpsmanager.ui.adapter.OnAssetClickListener
+import dev.csaba.diygpsmanager.ui.adapter.AssetAdapter
+import dev.csaba.diygpsmanager.viewmodel.MainViewModel
 
 
 class MainActivity : AppCompatActivityWithActionBar(), OnAssetClickListener {

@@ -7,7 +7,7 @@ import android.os.Bundle
 import android.text.method.LinkMovementMethod
 import android.widget.Button
 import android.widget.TextView
-import dev.csaba.assetlocationlogger.R
+import dev.csaba.diygpsmanager.R
 
 
 class StagingActivity : AppCompatActivityWithActionBar() {

@@ -1,7 +1,7 @@
 package dev.csaba.diygpsmanager.data.remote
 
 import com.google.firebase.Timestamp
-import dev.csaba.assetlocationlogger.data.Asset
+import dev.csaba.diygpsmanager.data.Asset
 import java.util.Date
 
 

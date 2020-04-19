@@ -7,8 +7,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.recycler_item.view.*
-import dev.csaba.assetlocationlogger.R
-import dev.csaba.assetlocationlogger.data.Asset
+import dev.csaba.diygpsmanager.R
+import dev.csaba.diygpsmanager.data.Asset
 import java.text.SimpleDateFormat
 import java.util.Locale
 

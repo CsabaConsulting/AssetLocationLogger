@@ -6,7 +6,7 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
-import dev.csaba.assetlocationlogger.R
+import dev.csaba.diygpsmanager.R
 
 
 class SettingsFragment : PreferenceFragmentCompat() {

@@ -3,9 +3,9 @@ package dev.csaba.diygpsmanager.data
 import android.util.Log
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
-import dev.csaba.assetlocationlogger.data.remote.RemoteAsset
-import dev.csaba.assetlocationlogger.data.remote.mapToAsset
-import dev.csaba.assetlocationlogger.data.remote.mapToAssetData
+import dev.csaba.diygpsmanager.data.remote.RemoteAsset
+import dev.csaba.diygpsmanager.data.remote.mapToAsset
+import dev.csaba.diygpsmanager.data.remote.mapToAssetData
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.ObservableEmitter

@@ -4,7 +4,7 @@ import android.content.Intent
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import dev.csaba.assetlocationlogger.R
+import dev.csaba.diygpsmanager.R
 
 abstract class AppCompatActivityWithActionBar : AppCompatActivity() {
 
