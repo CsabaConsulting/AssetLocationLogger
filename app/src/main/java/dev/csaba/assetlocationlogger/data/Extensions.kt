@@ -17,3 +17,10 @@ fun FragmentActivity.getSecondaryFirebaseConfiguration(): FirebaseProjectConfigu
         getPreferenceString(preferences, "api_key")
     )
 }
+
+fun FragmentActivity.hasConfiguration(): Boolean {
+    val configuration = this.getSecondaryFirebaseConfiguration()
+    return configuration.projectId.isNotBlank() &&
+            configuration.applicationId.isNotBlank() &&
+            configuration.apiKey.isNotBlank()
+}
