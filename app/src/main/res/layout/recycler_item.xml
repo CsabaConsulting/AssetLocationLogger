@@ -68,7 +68,7 @@
         app:layout_constraintStart_toStartOf="@id/assetTitle"
         app:layout_constraintEnd_toStartOf="@id/assetLockLon"
         app:layout_constraintTop_toBottomOf="@id/assetTitle"
-        app:layout_constraintBottom_toTopOf="@id/assetLockRadius"
+        app:layout_constraintBottom_toTopOf="@id/assetLockRadiusSeekBar"
         android:textSize="12sp"
         android:fontFamily="sans-serif"
         tools:text="assetLockLat"
@@ -81,35 +81,59 @@
         app:layout_constraintStart_toEndOf="@id/assetLockLat"
         app:layout_constraintEnd_toEndOf="@id/assetTitle"
         app:layout_constraintTop_toBottomOf="@id/assetTitle"
-        app:layout_constraintBottom_toTopOf="@id/assetLockRadius"
+        app:layout_constraintBottom_toTopOf="@id/assetLockRadiusSeekBar"
         android:textSize="12sp"
         android:fontFamily="sans-serif"
         tools:text="LockLon"
         />
 
-    <SeekBar
+    <TextView
         android:id="@+id/assetLockRadius"
-        style="@style/Widget.AppCompat.SeekBar.Discrete"
-        android:layout_width="0dp"
+        android:layout_width="60dp"
         android:layout_height="wrap_content"
-        android:max="500"
-        android:progress="100"
         app:layout_constraintStart_toStartOf="@id/assetTitle"
-        app:layout_constraintEnd_toEndOf="@id/assetTitle"
+        app:layout_constraintEnd_toStartOf="@id/assetLockRadiusSeekBar"
         app:layout_constraintTop_toBottomOf="@id/assetLockLat"
-        app:layout_constraintBottom_toBottomOf="@id/assetPeriodInterval"
+        android:paddingTop="10dp"
+        android:textSize="16sp"
+        android:fontFamily="sans-serif"
+        tools:text="Radius"
         />
 
     <SeekBar
-        android:id="@+id/assetPeriodInterval"
+        android:id="@+id/assetLockRadiusSeekBar"
         style="@style/Widget.AppCompat.SeekBar.Discrete"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:max="10"
-        android:progress="2"
-        app:layout_constraintStart_toStartOf="@id/assetTitle"
+        android:max="100"
+        app:layout_constraintStart_toEndOf="@id/assetLockRadius"
         app:layout_constraintEnd_toEndOf="@id/assetTitle"
-        app:layout_constraintTop_toBottomOf="@id/assetLockRadius"
+        app:layout_constraintTop_toBottomOf="@id/assetLockLat"
+        app:layout_constraintBottom_toBottomOf="@id/assetPeriodIntervalSeekBar"
+        />
+
+    <TextView
+        android:id="@+id/assetPeriodInterval"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/assetTitle"
+        app:layout_constraintEnd_toStartOf="@id/assetPeriodIntervalSeekBar"
+        app:layout_constraintTop_toBottomOf="@id/assetLockRadiusSeekBar"
+        android:paddingTop="10dp"
+        android:textSize="16sp"
+        android:fontFamily="sans-serif"
+        tools:text="Refresh"
+        />
+
+    <SeekBar
+        android:id="@+id/assetPeriodIntervalSeekBar"
+        style="@style/Widget.AppCompat.SeekBar.Discrete"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:max="6"
+        app:layout_constraintStart_toEndOf="@id/assetPeriodInterval"
+        app:layout_constraintEnd_toEndOf="@id/assetTitle"
+        app:layout_constraintTop_toBottomOf="@id/assetLockRadiusSeekBar"
         app:layout_constraintBottom_toBottomOf="parent"
         />
 

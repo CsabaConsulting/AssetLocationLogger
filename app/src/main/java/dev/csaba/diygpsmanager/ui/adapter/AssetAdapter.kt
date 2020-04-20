@@ -3,26 +3,29 @@ package dev.csaba.diygpsmanager.ui.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SeekBar
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.recycler_item.view.*
 import dev.csaba.diygpsmanager.R
 import dev.csaba.diygpsmanager.data.Asset
-import java.text.SimpleDateFormat
-import java.util.Locale
+import dev.csaba.diygpsmanager.data.remote.mapPeriodIntervalToProgress
+import kotlinx.android.extensions.LayoutContainer
+import kotlinx.android.synthetic.main.recycler_item.view.*
 
 
-class AssetAdapter(private val assetClickListener: OnAssetClickListener?) : RecyclerView.Adapter<AssetViewHolder>() {
+class AssetAdapter(private val assetInputListener: OnAssetInputListener?) : RecyclerView.Adapter<AssetViewHolder>(), SeekBar.OnSeekBarChangeListener {
 
     private val assetList = emptyList<Asset>().toMutableList()
-    private val createdFormat = SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault())
+    private var inputListener: OnAssetInputListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AssetViewHolder {
+        inputListener = assetInputListener
         val view = LayoutInflater.from(parent.context).inflate(R.layout.recycler_item, parent, false)
-        view.trackAsset.setOnClickListener { button -> assetClickListener?.run { this.onTrackClick(button.tag as String) } }
-        view.lockUnlockAsset.setOnClickListener { button -> assetClickListener?.run { this.onLockUnlockClick(button.tag as String) } }
-        view.deleteAsset.setOnClickListener { button -> assetClickListener?.run { this.onDeleteClick(button.tag as String) } }
+        view.trackAsset.setOnClickListener { button -> assetInputListener?.run { this.onTrackClick(button.tag as String) } }
+        view.lockUnlockAsset.setOnClickListener { button -> assetInputListener?.run { this.onLockUnlockClick(button.tag as String) } }
+        view.deleteAsset.setOnClickListener { button -> assetInputListener?.run { this.onDeleteClick(button.tag as String) } }
+        view.assetLockRadiusSeekBar.setOnSeekBarChangeListener(this)
+        view.assetPeriodIntervalSeekBar.setOnSeekBarChangeListener(this)
         return AssetViewHolder(view)
     }
 
@@ -32,17 +35,23 @@ class AssetAdapter(private val assetClickListener: OnAssetClickListener?) : Recy
         val asset = assetList[position]
         with(holder.containerView) {
             assetTitle.text = asset.title
-            assetLockLat.text = asset.lockLat.toString()
-            assetLockLon.text = asset.lockLon.toString()
+            assetLockLat.text = "${asset.lockLat}"
+            assetLockLon.text = "${asset.lockLon}"
+            assetLockRadius.text = "${asset.lockRadius}"
+            assetLockRadiusSeekBar.progress = asset.lockRadius
+            assetPeriodInterval.text = "${asset.periodInterval}"
+            assetPeriodIntervalSeekBar.progress = mapPeriodIntervalToProgress(asset.periodInterval)
 
-//            assetLockRadius.val = asset.lockRadius
-//            assetPeriodInterval.val = asset.periodInterval
-
-            trackAsset.tag = assetList[position].id
+            val assetTag = assetList[position].id
+            trackAsset.tag = assetTag
             val locked = Math.abs(asset.lockLat) > 1e-6 && Math.abs(asset.lockLon) > 1e-6
-            lockUnlockAsset.setIconResource(if (locked) R.drawable.ic_lock_closed else R.drawable.ic_lock_open)
-            lockUnlockAsset.tag = assetList[position].id
-            deleteAsset.tag = assetList[position].id
+            lockUnlockAsset.setIconResource(
+                if (locked) R.drawable.ic_lock_closed else R.drawable.ic_lock_open
+            )
+            lockUnlockAsset.tag = assetTag
+            deleteAsset.tag = assetTag
+            assetLockRadiusSeekBar.tag = "r_${assetTag}"
+            assetPeriodIntervalSeekBar.tag = "i_${assetTag}"
         }
     }
 
@@ -54,12 +63,32 @@ class AssetAdapter(private val assetClickListener: OnAssetClickListener?) : Recy
 
         diffResult.dispatchUpdatesTo(this)
     }
+
+    override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+        if (!fromUser)
+            return
+
+        val barTag = seekBar?.tag as String
+        val assetTag = barTag.substring(2)
+
+        if (barTag[0] == 'r') {
+            inputListener?.onLockRadiusChange(assetTag, seekBar.progress)
+        } else if (barTag[0] == 'i') {
+            inputListener?.onPeriodIntervalChange(assetTag, seekBar.progress)
+        }
+    }
+
+    override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+
+    override fun onStopTrackingTouch(seekBar: SeekBar?) {}
 }
 
 class AssetViewHolder(override val containerView: View): RecyclerView.ViewHolder(containerView), LayoutContainer
 
-interface OnAssetClickListener {
+interface OnAssetInputListener {
     fun onTrackClick(assetId: String)
     fun onLockUnlockClick(assetId: String)
     fun onDeleteClick(assetId: String)
+    fun onLockRadiusChange(assetId: String, lockRadius: Int)
+    fun onPeriodIntervalChange(assetId: String, periodIntervalProgress: Int)
 }

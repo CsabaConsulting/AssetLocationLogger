@@ -46,3 +46,40 @@ fun mapToAssetData(asset: Asset): HashMap<String, Any> {
         "updated" to mapDateToTimestamp(asset.updated)
     )
 }
+
+fun mapLockRadiusUpdate(lockRadius: Int): HashMap<String, Any> {
+    return hashMapOf(
+        "lockRadius" to lockRadius,
+        "updated" to mapDateToTimestamp(Date())
+    )
+}
+
+fun mapPeriodIntervalToProgress(periodInterval: Int): Int {
+    val intervals = intArrayOf(0, 1, 10, 60, 600, 3600, 86400)
+
+    for ((index, interval) in intervals.withIndex()) {
+        if (periodInterval <= interval)
+            return index
+    }
+
+    return intervals.size - 1
+}
+
+fun mapPeriodIntervalProgressToSeconds(periodIntervalProgress: Int): Int {
+    val intervals = intArrayOf(0, 1, 10, 60, 600, 3600, 86400)
+
+    if (periodIntervalProgress < 0)
+        return intervals.first()
+
+    if (periodIntervalProgress >= intervals.size)
+        return intervals.last()
+
+    return intervals[periodIntervalProgress]
+}
+
+fun mapPeriodIntervalUpdate(periodIntervalProgress: Int): HashMap<String, Any> {
+    return hashMapOf(
+        "periodInterval" to mapPeriodIntervalProgressToSeconds(periodIntervalProgress),
+        "updated" to mapDateToTimestamp(Date())
+    )
+}

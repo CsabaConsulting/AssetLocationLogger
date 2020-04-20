@@ -19,12 +19,12 @@ import kotlinx.android.synthetic.main.activity_main.assetTitle
 import kotlinx.android.synthetic.main.activity_main.recycler
 import dev.csaba.diygpsmanager.R
 import dev.csaba.diygpsmanager.data.getSecondaryFirebaseConfiguration
-import dev.csaba.diygpsmanager.ui.adapter.OnAssetClickListener
+import dev.csaba.diygpsmanager.ui.adapter.OnAssetInputListener
 import dev.csaba.diygpsmanager.ui.adapter.AssetAdapter
 import dev.csaba.diygpsmanager.viewmodel.MainViewModel
 
 
-class MainActivity : AppCompatActivityWithActionBar(), OnAssetClickListener {
+class MainActivity : AppCompatActivityWithActionBar(), OnAssetInputListener {
 
     companion object {
         private const val TAG = "MainActivity"
@@ -106,5 +106,13 @@ class MainActivity : AppCompatActivityWithActionBar(), OnAssetClickListener {
 
     override fun onDeleteClick(assetId: String) {
         viewModel.deleteAsset(assetId)
+    }
+
+    override fun onLockRadiusChange(assetId: String, lockRadius: Int) {
+        viewModel.setAssetLockRadius(assetId, lockRadius)
+    }
+
+    override fun onPeriodIntervalChange(assetId: String, periodIntervalProgress: Int) {
+        viewModel.setAssetPeriodInterval(assetId, periodIntervalProgress)
     }
 }

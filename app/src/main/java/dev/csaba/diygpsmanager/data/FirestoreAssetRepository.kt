@@ -11,6 +11,7 @@ import io.reactivex.ObservableEmitter
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
+import java.util.*
 
 
 class FirestoreAssetRepository(secondaryDB: FirebaseFirestore) : IAssetRepository {
@@ -141,7 +142,7 @@ class FirestoreAssetRepository(secondaryDB: FirebaseFirestore) : IAssetRepositor
                         assetReference.collection(REPORT_COLLECTION).orderBy("created", Query.Direction.DESCENDING).limit(1).get()
                             .addOnSuccessListener {
                                 val report = mapDocumentToRemoteReport(it.documents[0])
-                                Log.d(TAG, String.format("Locking at %f, %f", report.lat, report.lon))
+                                Log.d(TAG, "Locking at ${report.lat}, ${report.lon}")
                                 assetReference.update(mapToLockLocation(mapToReport(report)))
                                     .addOnSuccessListener {
                                         Log.d(TAG, "Locked!")
@@ -166,6 +167,42 @@ class FirestoreAssetRepository(secondaryDB: FirebaseFirestore) : IAssetRepositor
                 }
                 .addOnFailureListener {
                     Log.d(TAG, "Could not find asset to unlock")
+                    if (!emitter.isDisposed) {
+                        emitter.onError(it)
+                    }
+                }
+        }
+    }
+
+    override fun setAssetLockRadius(assetId: String, lockRadius: Int): Completable {
+        return Completable.create { emitter ->
+            remoteDB.collection(ASSET_COLLECTION)
+                .document(assetId)
+                .update(mapLockRadiusUpdate(lockRadius))
+                .addOnSuccessListener {
+                    if (!emitter.isDisposed) {
+                        emitter.onComplete()
+                    }
+                }
+                .addOnFailureListener {
+                    if (!emitter.isDisposed) {
+                        emitter.onError(it)
+                    }
+                }
+        }
+    }
+
+    override fun setAssetPeriodInterval(assetId: String, periodIntervalProgress: Int): Completable {
+        return Completable.create { emitter ->
+            remoteDB.collection(ASSET_COLLECTION)
+                .document(assetId)
+                .update(mapPeriodIntervalUpdate(periodIntervalProgress))
+                .addOnSuccessListener {
+                    if (!emitter.isDisposed) {
+                        emitter.onComplete()
+                    }
+                }
+                .addOnFailureListener {
                     if (!emitter.isDisposed) {
                         emitter.onError(it)
                     }
