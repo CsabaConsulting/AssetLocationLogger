@@ -20,10 +20,11 @@ class AssetAdapter(private val assetClickListener: OnAssetClickListener?) : Recy
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AssetViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.recycler_item, parent, false)
+        view.trackAsset.setOnClickListener { button -> assetClickListener?.run { this.onTrackClick(button.tag as String) } }
+        view.lockUnlockAsset.setOnClickListener { button -> assetClickListener?.run { this.onLockUnlockClick(button.tag as String) } }
         view.deleteAsset.setOnClickListener { button -> assetClickListener?.run { this.onDeleteClick(button.tag as String) } }
         return AssetViewHolder(view)
     }
-
 
     override fun getItemCount() = assetList.size
 
@@ -33,7 +34,13 @@ class AssetAdapter(private val assetClickListener: OnAssetClickListener?) : Recy
             assetTitle.text = asset.title
             assetCreated.text = createdFormat.format(asset.created)
             assetUpdated.text = createdFormat.format(asset.updated)
+            assetLockLat.text = asset.lockLat.toString()
+            assetLockLon.text = asset.lockLon.toString()
+//            assetLockRadius.val = asset.lockRadius
+//            assetPeriodInterval.val = asset.periodInterval
 
+            trackAsset.tag = assetList[position].id
+            lockUnlockAsset.tag = assetList[position].id
             deleteAsset.tag = assetList[position].id
         }
     }
@@ -51,5 +58,7 @@ class AssetAdapter(private val assetClickListener: OnAssetClickListener?) : Recy
 class AssetViewHolder(override val containerView: View): RecyclerView.ViewHolder(containerView), LayoutContainer
 
 interface OnAssetClickListener {
+    fun onTrackClick(assetId: String)
+    fun onLockUnlockClick(assetId: String)
     fun onDeleteClick(assetId: String)
 }

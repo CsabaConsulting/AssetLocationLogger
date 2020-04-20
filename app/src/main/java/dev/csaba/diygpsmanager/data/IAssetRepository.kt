@@ -11,6 +11,7 @@ interface IAssetRepository {
 
     fun addAsset(asset: Asset): Completable
     fun deleteAsset(assetId: String): Completable
+    fun lockUnlockAsset(assetId: String): Completable
 
     fun getChangeObservable(): Observable<List<Asset>>
 

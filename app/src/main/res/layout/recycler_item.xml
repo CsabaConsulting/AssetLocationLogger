@@ -9,14 +9,27 @@
     android:paddingEnd="16dp">
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/locateAsset"
+        android:id="@+id/trackAsset"
         android:layout_width="50dp"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/deleteAsset"
+        app:layout_constraintBottom_toTopOf="@+id/lockUnlockAsset"
+        app:layout_constraintEnd_toEndOf="parent"
         style="@style/Widget.MaterialComponents.Button.Icon"
         app:icon="@drawable/ic_location"
+        app:iconGravity="textStart"
+        app:iconPadding="0dp"
+        />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/lockUnlockAsset"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/trackAsset"
+        app:layout_constraintBottom_toTopOf="@+id/deleteAsset"
+        app:layout_constraintEnd_toEndOf="parent"
+        style="@style/Widget.MaterialComponents.Button.Icon"
+        app:icon="@drawable/ic_lock_open"
         app:iconGravity="textStart"
         app:iconPadding="0dp"
         />
@@ -25,7 +38,7 @@
         android:id="@+id/deleteAsset"
         android:layout_width="50dp"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lockUnlockAsset"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         style="@style/Widget.MaterialComponents.Button.Icon"
@@ -38,12 +51,12 @@
         android:id="@+id/assetTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toStartOf="@id/locateAsset"
+        app:layout_constraintEnd_toStartOf="@id/trackAsset"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/assetCreated"
         android:layout_marginEnd="8dp"
-        android:textSize="16sp"
+        android:textSize="20sp"
         android:fontFamily="sans-serif-black"
         tools:text="Long asset name"
         />
@@ -55,10 +68,10 @@
         app:layout_constraintStart_toStartOf="@id/assetTitle"
         app:layout_constraintEnd_toStartOf="@id/assetUpdated"
         app:layout_constraintTop_toBottomOf="@id/assetTitle"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/assetLockLat"
         android:textSize="12sp"
         android:fontFamily="sans-serif"
-        tools:text="10.12.2018 22:33"
+        tools:text="assetCreated"
         />
 
     <TextView
@@ -68,11 +81,62 @@
         app:layout_constraintStart_toEndOf="@id/assetCreated"
         app:layout_constraintEnd_toEndOf="@id/assetTitle"
         app:layout_constraintTop_toBottomOf="@id/assetTitle"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/assetLockLon"
         android:textSize="12sp"
         android:fontFamily="sans-serif"
-        tools:text="10.12.2018 22:33"
+        tools:text="assetUpdated"
         />
 
+    <TextView
+        android:id="@+id/assetLockLat"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/assetTitle"
+        app:layout_constraintEnd_toStartOf="@id/assetLockLon"
+        app:layout_constraintTop_toBottomOf="@id/assetCreated"
+        app:layout_constraintBottom_toTopOf="@id/assetLockRadius"
+        android:textSize="12sp"
+        android:fontFamily="sans-serif"
+        tools:text="assetLockLat"
+        />
+
+    <TextView
+        android:id="@+id/assetLockLon"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/assetLockLat"
+        app:layout_constraintEnd_toEndOf="@id/assetTitle"
+        app:layout_constraintTop_toBottomOf="@id/assetUpdated"
+        app:layout_constraintBottom_toTopOf="@id/assetLockRadius"
+        android:textSize="12sp"
+        android:fontFamily="sans-serif"
+        tools:text="LockLon"
+        />
+
+    <SeekBar
+        android:id="@+id/assetLockRadius"
+        style="@style/Widget.AppCompat.SeekBar.Discrete"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:max="500"
+        android:progress="100"
+        app:layout_constraintStart_toStartOf="@id/assetTitle"
+        app:layout_constraintEnd_toEndOf="@id/assetTitle"
+        app:layout_constraintTop_toBottomOf="@id/assetLockLat"
+        app:layout_constraintBottom_toBottomOf="@id/assetPeriodInterval"
+        />
+
+    <SeekBar
+        android:id="@+id/assetPeriodInterval"
+        style="@style/Widget.AppCompat.SeekBar.Discrete"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:max="10"
+        android:progress="2"
+        app:layout_constraintStart_toStartOf="@id/assetTitle"
+        app:layout_constraintEnd_toEndOf="@id/assetTitle"
+        app:layout_constraintTop_toBottomOf="@id/assetLockRadius"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

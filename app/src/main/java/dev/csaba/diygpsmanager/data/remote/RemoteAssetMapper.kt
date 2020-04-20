@@ -46,4 +46,3 @@ fun mapToAssetData(asset: Asset): HashMap<String, Any> {
         "updated" to mapDateToTimestamp(asset.updated)
     )
 }
-

@@ -60,6 +60,10 @@ class MainViewModel(firestore: FirebaseFirestore) : ViewModel() {
             .addTo(disposable)
     }
 
+    fun lockUnlockAsset(assetId: String) {
+        repository.lockUnlockAsset(assetId)
+    }
+
     override fun onCleared() {
         super.onCleared()
         disposable.clear()

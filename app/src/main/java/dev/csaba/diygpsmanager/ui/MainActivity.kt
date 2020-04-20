@@ -96,6 +96,14 @@ class MainActivity : AppCompatActivityWithActionBar(), OnAssetClickListener {
         }
     }
 
+    override fun onTrackClick(assetId: String) {
+        // TODO: navigate to Track Activity
+    }
+
+    override fun onLockUnlockClick(assetId: String) {
+        viewModel.lockUnlockAsset(assetId)
+    }
+
     override fun onDeleteClick(assetId: String) {
         viewModel.deleteAsset(assetId)
     }
