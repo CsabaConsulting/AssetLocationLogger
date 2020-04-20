@@ -178,7 +178,7 @@ class FirestoreAssetRepository(secondaryDB: FirebaseFirestore) : IAssetRepositor
         return Completable.create { emitter ->
             remoteDB.collection(ASSET_COLLECTION)
                 .document(assetId)
-                .update(mapLockRadiusUpdate(lockRadius))
+                .update(mapLockRadiusUpdate(lockRadius * 25))
                 .addOnSuccessListener {
                     if (!emitter.isDisposed) {
                         emitter.onComplete()

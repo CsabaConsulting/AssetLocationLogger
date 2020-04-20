@@ -38,7 +38,7 @@ class AssetAdapter(private val assetInputListener: OnAssetInputListener?) : Recy
             assetLockLat.text = "${asset.lockLat}"
             assetLockLon.text = "${asset.lockLon}"
             assetLockRadius.text = "${asset.lockRadius}"
-            assetLockRadiusSeekBar.progress = asset.lockRadius
+            assetLockRadiusSeekBar.progress = asset.lockRadius / 25
             assetPeriodInterval.text = "${asset.periodInterval}"
             assetPeriodIntervalSeekBar.progress = mapPeriodIntervalToProgress(asset.periodInterval)
 
