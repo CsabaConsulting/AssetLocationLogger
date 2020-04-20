@@ -62,6 +62,13 @@ class MainViewModel(firestore: FirebaseFirestore) : ViewModel() {
 
     fun lockUnlockAsset(assetId: String) {
         repository.lockUnlockAsset(assetId)
+            .subscribeOn(Schedulers.io())
+            .subscribe(
+                {},
+                {
+                    it.printStackTrace()
+                })
+            .addTo(disposable)
     }
 
     override fun onCleared() {

@@ -112,31 +112,49 @@ class FirestoreAssetRepository(secondaryDB: FirebaseFirestore) : IAssetRepositor
     private fun mapDocumentToRemoteReport(document: DocumentSnapshot) = document.toObject(RemoteReport::class.java)!!.apply { id = document.id }
 
     override fun lockUnlockAsset(assetId: String): Completable {
-        Log.d(TAG, String.format("lockUnlockAsset"))
+        Log.d(TAG, "lockUnlockAsset")
         return Completable.create { emitter ->
             remoteDB.collection(ASSET_COLLECTION)
                 .document(assetId)
                 .get()
                 .addOnSuccessListener {
-                    Log.d(TAG, String.format("Unlocking"))
+                    Log.d(TAG, "Locking/Unlocking 1")
                     val remoteAsset = mapDocumentToRemoteAsset(it)
-                    if (remoteAsset.lockLat > 1e-6 && remoteAsset.lockLon > 1e-6) {
+                    if (Math.abs(remoteAsset.lockLat) > 1e-6 && Math.abs(remoteAsset.lockLon) > 1e-6) {
+                        Log.d(TAG, "Unlocking...")
                         it.reference.update(getUnlockLocation())
-                        if (!emitter.isDisposed) {
-                            emitter.onComplete()
-                        }
-                    } else {
-                        val assetReference = it.reference
-                        assetReference.collection(REPORT_COLLECTION).orderBy("created", Query.Direction.DESCENDING).limit(1).get()
                             .addOnSuccessListener {
-                                if (!it.isEmpty) {
-                                    val report = mapDocumentToRemoteReport(it.documents[0])
-                                    Log.d(TAG, String.format("Locking at %f, %f", report.lat, report.lon))
-                                    assetReference.update(mapToLockLocation(mapToReport(report)))
-                                }
+                                Log.d(TAG, "Unlocked!")
                                 if (!emitter.isDisposed) {
                                     emitter.onComplete()
                                 }
+                            }
+                            .addOnFailureListener {
+                                Log.d(TAG, "Unlocking fail")
+                                if (!emitter.isDisposed) {
+                                    emitter.onError(it)
+                                }
+                            }
+                    } else {
+                        val assetReference = it.reference
+                        Log.d(TAG, "Getting latest location for locking...")
+                        assetReference.collection(REPORT_COLLECTION).orderBy("created", Query.Direction.DESCENDING).limit(1).get()
+                            .addOnSuccessListener {
+                                val report = mapDocumentToRemoteReport(it.documents[0])
+                                Log.d(TAG, String.format("Locking at %f, %f", report.lat, report.lon))
+                                assetReference.update(mapToLockLocation(mapToReport(report)))
+                                    .addOnSuccessListener {
+                                        Log.d(TAG, "Locked!")
+                                        if (!emitter.isDisposed) {
+                                            emitter.onComplete()
+                                        }
+                                    }
+                                    .addOnFailureListener {
+                                        Log.d(TAG, "Locking fail")
+                                        if (!emitter.isDisposed) {
+                                            emitter.onError(it)
+                                        }
+                                    }
                             }
                             .addOnFailureListener {
                                 Log.d(TAG, "Could not find latest location for locking")
@@ -153,8 +171,6 @@ class FirestoreAssetRepository(secondaryDB: FirebaseFirestore) : IAssetRepositor
                     }
                 }
         }
-            .subscribeOn(Schedulers.io())
-            .observeOn(Schedulers.computation())
     }
 
     override fun getChangeObservable(): Observable<List<Asset>> =

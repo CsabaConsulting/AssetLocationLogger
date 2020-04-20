@@ -34,10 +34,13 @@ class AssetAdapter(private val assetClickListener: OnAssetClickListener?) : Recy
             assetTitle.text = asset.title
             assetLockLat.text = asset.lockLat.toString()
             assetLockLon.text = asset.lockLon.toString()
+
 //            assetLockRadius.val = asset.lockRadius
 //            assetPeriodInterval.val = asset.periodInterval
 
             trackAsset.tag = assetList[position].id
+            val locked = Math.abs(asset.lockLat) > 1e-6 && Math.abs(asset.lockLon) > 1e-6
+            lockUnlockAsset.setIconResource(if (locked) R.drawable.ic_lock_closed else R.drawable.ic_lock_open)
             lockUnlockAsset.tag = assetList[position].id
             deleteAsset.tag = assetList[position].id
         }

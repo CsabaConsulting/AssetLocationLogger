@@ -36,16 +36,16 @@ fun mapToReportData(report: Report): HashMap<String, Any> {
 
 fun mapToLockLocation(report: Report): HashMap<String, Any> {
     return hashMapOf(
-        "lat" to report.lat,
-        "lon" to report.lon,
+        "lockLat" to report.lat,
+        "lockLon" to report.lon,
         "modified" to mapDateToTimestamp(Date())
     )
 }
 
 fun getUnlockLocation(): HashMap<String, Any> {
     return hashMapOf(
-        "lat" to 0.0,
-        "lon" to 0.0,
+        "lockLat" to 0.0,
+        "lockLon" to 0.0,
         "modified" to mapDateToTimestamp(Date())
     )
 }
