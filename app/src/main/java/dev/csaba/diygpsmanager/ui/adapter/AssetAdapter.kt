@@ -32,8 +32,6 @@ class AssetAdapter(private val assetClickListener: OnAssetClickListener?) : Recy
         val asset = assetList[position]
         with(holder.containerView) {
             assetTitle.text = asset.title
-            assetCreated.text = createdFormat.format(asset.created)
-            assetUpdated.text = createdFormat.format(asset.updated)
             assetLockLat.text = asset.lockLat.toString()
             assetLockLon.text = asset.lockLon.toString()
 //            assetLockRadius.val = asset.lockRadius

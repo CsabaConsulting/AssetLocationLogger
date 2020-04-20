@@ -54,37 +54,11 @@
         app:layout_constraintEnd_toStartOf="@id/trackAsset"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/assetCreated"
+        app:layout_constraintBottom_toTopOf="@+id/assetLockLat"
         android:layout_marginEnd="8dp"
         android:textSize="20sp"
         android:fontFamily="sans-serif-black"
         tools:text="Long asset name"
-        />
-
-    <TextView
-        android:id="@+id/assetCreated"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="@id/assetTitle"
-        app:layout_constraintEnd_toStartOf="@id/assetUpdated"
-        app:layout_constraintTop_toBottomOf="@id/assetTitle"
-        app:layout_constraintBottom_toTopOf="@id/assetLockLat"
-        android:textSize="12sp"
-        android:fontFamily="sans-serif"
-        tools:text="assetCreated"
-        />
-
-    <TextView
-        android:id="@+id/assetUpdated"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toEndOf="@id/assetCreated"
-        app:layout_constraintEnd_toEndOf="@id/assetTitle"
-        app:layout_constraintTop_toBottomOf="@id/assetTitle"
-        app:layout_constraintBottom_toTopOf="@id/assetLockLon"
-        android:textSize="12sp"
-        android:fontFamily="sans-serif"
-        tools:text="assetUpdated"
         />
 
     <TextView
@@ -93,7 +67,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="@id/assetTitle"
         app:layout_constraintEnd_toStartOf="@id/assetLockLon"
-        app:layout_constraintTop_toBottomOf="@id/assetCreated"
+        app:layout_constraintTop_toBottomOf="@id/assetTitle"
         app:layout_constraintBottom_toTopOf="@id/assetLockRadius"
         android:textSize="12sp"
         android:fontFamily="sans-serif"
@@ -106,7 +80,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toEndOf="@id/assetLockLat"
         app:layout_constraintEnd_toEndOf="@id/assetTitle"
-        app:layout_constraintTop_toBottomOf="@id/assetUpdated"
+        app:layout_constraintTop_toBottomOf="@id/assetTitle"
         app:layout_constraintBottom_toTopOf="@id/assetLockRadius"
         android:textSize="12sp"
         android:fontFamily="sans-serif"
