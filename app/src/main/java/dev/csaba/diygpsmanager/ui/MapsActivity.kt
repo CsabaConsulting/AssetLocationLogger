@@ -21,17 +21,16 @@ import com.google.android.gms.maps.model.Marker
 import dev.csaba.diygpsmanager.R
 
 
-//This class allows you to interact with the map by adding markers, styling its appearance and
-// displaying the user's location.
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var map: GoogleMap
     private val REQUEST_LOCATION_PERMISSION = 1
+    private var isRestore: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        isRestore = savedInstanceState != null
         setContentView(R.layout.activity_maps)
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
@@ -40,11 +39,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near the Googleplex.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
      */
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
@@ -125,19 +119,20 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         if (isPermissionGranted()) {
             map.isMyLocationEnabled = true
 
-            val locationManager =
-                getSystemService(LOCATION_SERVICE) as LocationManager
-            val locationProvider = LocationManager.NETWORK_PROVIDER
-            @SuppressLint("MissingPermission") val lastKnownLocation =
-                locationManager.getLastKnownLocation(locationProvider)
+            if (!isRestore) {
+                val locationManager =
+                    getSystemService(LOCATION_SERVICE) as LocationManager
+                val locationProvider = LocationManager.NETWORK_PROVIDER
+                @SuppressLint("MissingPermission") val lastKnownLocation =
+                    locationManager.getLastKnownLocation(locationProvider)
 
-            // Default to the lattitude and longitude of the Googleplex if no location.
-            val userLat = lastKnownLocation?.latitude ?: 37.422160
-            val userLong = lastKnownLocation?.longitude ?: -122.084270
-            val userLatLng = LatLng(userLat, userLong)
-            map.moveCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, 10f))
-        }
-        else {
+                // Default to the lattitude and longitude of the Googleplex if no location.
+                val userLat = lastKnownLocation?.latitude ?: 37.422160
+                val userLong = lastKnownLocation?.longitude ?: -122.084270
+                val userLatLng = LatLng(userLat, userLong)
+                map.moveCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, 10f))
+            }
+        } else {
             ActivityCompat.requestPermissions(
                 this,
                 arrayOf<String>(Manifest.permission.ACCESS_FINE_LOCATION),
