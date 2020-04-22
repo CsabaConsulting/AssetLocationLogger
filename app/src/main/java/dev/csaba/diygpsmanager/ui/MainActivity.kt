@@ -1,5 +1,6 @@
 package dev.csaba.diygpsmanager.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -97,7 +98,8 @@ class MainActivity : AppCompatActivityWithActionBar(), OnAssetInputListener {
     }
 
     override fun onTrackClick(assetId: String) {
-        // TODO: navigate to Track Activity
+        val intent = Intent(applicationContext, MapsActivity::class.java)
+        startActivity(intent)
     }
 
     override fun onLockUnlockClick(assetId: String) {
