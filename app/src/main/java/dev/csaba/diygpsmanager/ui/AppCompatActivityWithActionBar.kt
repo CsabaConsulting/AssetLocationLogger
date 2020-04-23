@@ -19,16 +19,16 @@ abstract class AppCompatActivityWithActionBar : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
         if (item.itemId == R.id.settings_menu_button) {
-            val intent = Intent(applicationContext, SettingsActivity::class.java)
+            val intent = Intent(this, SettingsActivity::class.java)
             startActivity(intent)
             return true
         } else if (item.itemId == R.id.assets_menu_button) {
             if (!this.hasConfiguration()) {
-                Toast.makeText(baseContext,
-                    applicationContext.getString(R.string.uncofigured_firestore),
+                Toast.makeText(this,
+                    getString(R.string.uncofigured_firestore),
                     Toast.LENGTH_SHORT).show()
             } else {
-                val intent = Intent(applicationContext, MainActivity::class.java)
+                val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
             }
             return true

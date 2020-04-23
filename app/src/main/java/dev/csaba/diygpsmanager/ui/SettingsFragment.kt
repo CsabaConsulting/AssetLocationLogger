@@ -26,13 +26,13 @@ class SettingsFragment : PreferenceFragmentCompat() {
     }
 
     override fun onPreferenceTreeClick(preference: Preference): Boolean {
-        if (preference.key == context?.getString(R.string.settings_help_key)) {
-            openBrowserWindow(context?.getString(R.string.home_page_url), context)
+        if (preference.key == getString(R.string.settings_help_key)) {
+            openBrowserWindow(getString(R.string.home_page_url), context)
             return true
-        } else if (preference.key == context?.getString(R.string.connect_key)) {
+        } else if (preference.key == getString(R.string.connect_key)) {
             if (!requireActivity().hasConfiguration()) {
                 Toast.makeText(context,
-                    requireContext().getString(R.string.uncofigured_firestore),
+                    getString(R.string.uncofigured_firestore),
                     Toast.LENGTH_SHORT).show()
             } else {
                 val mainPage = Intent(context, MainActivity::class.java)

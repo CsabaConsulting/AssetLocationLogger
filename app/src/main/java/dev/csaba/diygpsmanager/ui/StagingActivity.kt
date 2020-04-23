@@ -8,6 +8,7 @@ import android.text.method.LinkMovementMethod
 import android.widget.Button
 import android.widget.TextView
 import dev.csaba.diygpsmanager.R
+import dev.csaba.diygpsmanager.data.hasConfiguration
 
 
 class StagingActivity : AppCompatActivityWithActionBar() {
@@ -16,23 +17,28 @@ class StagingActivity : AppCompatActivityWithActionBar() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_staging)
 
+        if (hasConfiguration()) {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
+
         val settingHelpText: TextView = findViewById(R.id.settingsHelp)
         settingHelpText.movementMethod = LinkMovementMethod.getInstance()
 
         val settingButton: Button = findViewById(R.id.settingsButton)
         settingButton.setOnClickListener {
-            val intent = Intent(applicationContext, SettingsActivity::class.java)
+            val intent = Intent(this, SettingsActivity::class.java)
             startActivity(intent)
         }
 
         val privacyButton: Button = findViewById(R.id.privacyButton)
         privacyButton.setOnClickListener {
-            openBrowserWindow(applicationContext.getString(R.string.privacy_policy_url), applicationContext)
+            openBrowserWindow(applicationContext.getString(R.string.privacy_policy_url), this)
         }
 
         val helpButton: Button = findViewById(R.id.helpButton)
         helpButton.setOnClickListener {
-            openBrowserWindow(applicationContext.getString(R.string.home_page_url), applicationContext)
+            openBrowserWindow(applicationContext.getString(R.string.home_page_url), this)
         }
     }
 

@@ -98,7 +98,7 @@ class MainActivity : AppCompatActivityWithActionBar(), OnAssetInputListener {
     }
 
     override fun onTrackClick(assetId: String) {
-        val intent = Intent(applicationContext, MapsActivity::class.java)
+        val intent = Intent(this, MapsActivity::class.java)
         startActivity(intent)
     }
 
