@@ -33,6 +33,7 @@ class MainActivity : AppCompatActivityWithActionBar(), OnAssetInputListener {
     companion object {
         private const val TAG = "MainActivity"
         private const val SECONDARY_NAME = "secondary"
+        private const val RC_SIGN_IN = 9001
     }
 
     private lateinit var viewModel: MainViewModel
@@ -83,7 +84,7 @@ class MainActivity : AppCompatActivityWithActionBar(), OnAssetInputListener {
                 if (account != null) {
                     firebaseAuthWithGoogle(account)
                 } else {
-                    val googleSignInClient = GoogleSignIn.getClient(this, signInOptions);
+                    val googleSignInClient = GoogleSignIn.getClient(this, signInOptions)
                     val signInIntent = googleSignInClient.signInIntent
                     startActivityForResult(signInIntent, RC_SIGN_IN)
                 }
@@ -133,7 +134,7 @@ class MainActivity : AppCompatActivityWithActionBar(), OnAssetInputListener {
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d(TAG, "signInWithCredential:success")
-                    appSingleton = application as ApplicationSingleton
+                    val appSingleton = application as ApplicationSingleton
                     populateViewModel(appSingleton.firestore!!)
                 } else {
                     // If sign in fails, display a message to the user.
