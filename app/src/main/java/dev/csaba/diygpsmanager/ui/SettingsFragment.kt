@@ -4,9 +4,9 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.widget.Toast
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import com.google.android.material.snackbar.Snackbar
 import dev.csaba.diygpsmanager.R
 import dev.csaba.diygpsmanager.data.hasConfiguration
 
@@ -31,9 +31,11 @@ class SettingsFragment : PreferenceFragmentCompat() {
             return true
         } else if (preference.key == getString(R.string.connect_key)) {
             if (!requireActivity().hasConfiguration()) {
-                Toast.makeText(context,
+                Snackbar.make(
+                    requireView(),
                     getString(R.string.uncofigured_firestore),
-                    Toast.LENGTH_SHORT).show()
+                    Snackbar.LENGTH_SHORT
+                ).show()
             } else {
                 val mainPage = Intent(context, MainActivity::class.java)
                 startActivity(mainPage)

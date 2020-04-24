@@ -3,8 +3,8 @@ package dev.csaba.diygpsmanager.ui
 import android.content.Intent
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.snackbar.Snackbar
 import dev.csaba.diygpsmanager.R
 import dev.csaba.diygpsmanager.data.hasConfiguration
 
@@ -24,9 +24,11 @@ abstract class AppCompatActivityWithActionBar : AppCompatActivity() {
             return true
         } else if (item.itemId == R.id.assets_menu_button) {
             if (!this.hasConfiguration()) {
-                Toast.makeText(this,
+                Snackbar.make(
+                    window.decorView.rootView,
                     getString(R.string.uncofigured_firestore),
-                    Toast.LENGTH_SHORT).show()
+                    Snackbar.LENGTH_SHORT
+                ).show()
             } else {
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
