@@ -5,8 +5,8 @@ import java.util.Date
 
 data class Report(
     var id: String = "",
-    var lat: Float = 0f,
-    var lon: Float = 0f,
-    var battery: Float = 0f,
+    var lat: Double = .0,
+    var lon: Double = .0,
+    var battery: Double = .0,
     var created: Date = Date()
 )

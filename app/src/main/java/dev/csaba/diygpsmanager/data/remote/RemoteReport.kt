@@ -5,8 +5,8 @@ import com.google.firebase.Timestamp
 
 data class RemoteReport(
     var id: String = "",
-    var lat: Float = 0f,
-    var lon: Float = 0f,
-    var battery: Float = 0f,
+    var lat: Double = .0,
+    var lon: Double = .0,
+    var battery: Double = .0,
     var created: Timestamp = Timestamp(0, 0)
 )

@@ -11,7 +11,6 @@ import io.reactivex.ObservableEmitter
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
-import java.util.*
 
 
 class FirestoreAssetRepository(secondaryDB: FirebaseFirestore) : IAssetRepository {
@@ -214,10 +213,5 @@ class FirestoreAssetRepository(secondaryDB: FirebaseFirestore) : IAssetRepositor
         changeObservable.hide()
             .observeOn(Schedulers.io())
             .map { list -> list.map(::mapDocumentToRemoteAsset).map(::mapToAsset) }
-
-//    override fun getAllReports(asset: Asset): Single<List<Report>> {
-//        return Single.create<List<DocumentSnapshot>> { emitter ->
-//            asset.collection(REPORT_COLLECTION)
-//    }
 
 }
