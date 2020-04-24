@@ -14,7 +14,8 @@ fun FragmentActivity.getSecondaryFirebaseConfiguration(): FirebaseProjectConfigu
     return FirebaseProjectConfiguration(
         getPreferenceString(preferences, "project_id"),
         getPreferenceString(preferences, "application_id"),
-        getPreferenceString(preferences, "api_key")
+        getPreferenceString(preferences, "api_key"),
+        preferences.getBoolean("auth_type", false)
     )
 }
 
