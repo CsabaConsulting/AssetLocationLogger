@@ -21,12 +21,10 @@ class FirestoreReportRepository(secondaryDB: FirebaseFirestore) : IReportReposit
         private const val REPORT_COLLECTION = "Reports"
     }
 
-    private var remoteDB: FirebaseFirestore
+    private val remoteDB: FirebaseFirestore = secondaryDB
     private var changeObservable: Observable<List<DocumentSnapshot>>
 
     init {
-        remoteDB = secondaryDB
-
         changeObservable = BehaviorSubject.create { emitter: ObservableEmitter<List<DocumentSnapshot>> ->
             val listeningRegistration = remoteDB.collection(ASSET_COLLECTION)
                 .addSnapshotListener { value, error ->
@@ -39,7 +37,7 @@ class FirestoreReportRepository(secondaryDB: FirebaseFirestore) : IReportReposit
                     }
 
                     value.documentChanges.forEach {
-                        Log.d("FirestoreAssetRepo", "Data changed type ${it.type} document ${it.document.id}")
+                        Log.d(TAG, "Data changed type ${it.type} document ${it.document.id}")
                     }
                 }
 
@@ -47,9 +45,13 @@ class FirestoreReportRepository(secondaryDB: FirebaseFirestore) : IReportReposit
         }
     }
 
+    private fun mapDocumentToRemoteReport(document: DocumentSnapshot) = document.toObject(RemoteReport::class.java)!!.apply { id = document.id }
+
     override fun getAllReports(asset: Asset): Single<List<Report>> {
         return Single.create<List<DocumentSnapshot>> { emitter ->
             remoteDB.collection(ASSET_COLLECTION)
+                .document(asset.id).collection(REPORT_COLLECTION)
+                .orderBy("created", Query.Direction.ASCENDING)
                 .get()
                 .addOnSuccessListener {
                     if (!emitter.isDisposed) {
@@ -65,18 +67,14 @@ class FirestoreReportRepository(secondaryDB: FirebaseFirestore) : IReportReposit
             .observeOn(Schedulers.io())
             .flatMapObservable { Observable.fromIterable(it) }
             .map(::mapDocumentToRemoteReport)
-            .map(::mapToAsset)
+            .map(::mapToReport)
             .toList()
-
-//        return Single.create<List<DocumentSnapshot>> { emitter ->
-//            asset.collection(REPORT_COLLECTION)
     }
 
-    private fun mapDocumentToRemoteReport(document: DocumentSnapshot) = document.toObject(RemoteReport::class.java)!!.apply { id = document.id }
-
-    override fun addAsset(asset: Asset): Completable {
+    override fun addReport(asset: Asset, report: Report): Completable {
         return Completable.create { emitter ->
             remoteDB.collection(ASSET_COLLECTION)
+                .document(asset.id).collection(REPORT_COLLECTION)
                 .add(mapToAssetData(asset))
                 .addOnSuccessListener {
                     it.collection(REPORT_COLLECTION)
@@ -91,8 +89,6 @@ class FirestoreReportRepository(secondaryDB: FirebaseFirestore) : IReportReposit
                 }
         }
     }
-
-    private fun mapDocumentToRemoteReport(document: DocumentSnapshot) = document.toObject(RemoteReport::class.java)!!.apply { id = document.id }
 
     override fun getChangeObservable(): Observable<List<Report>> =
         changeObservable.hide()

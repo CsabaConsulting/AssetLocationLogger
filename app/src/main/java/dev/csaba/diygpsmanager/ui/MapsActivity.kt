@@ -12,13 +12,16 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Observer
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
+import dev.csaba.diygpsmanager.ApplicationSingleton
 import dev.csaba.diygpsmanager.R
+import dev.csaba.diygpsmanager.viewmodel.MapsViewModel
 
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
@@ -26,6 +29,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var map: GoogleMap
     private val REQUEST_LOCATION_PERMISSION = 1
     private var isRestore: Boolean = false
+
+    private lateinit var viewModel: MapsViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,6 +56,14 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         setMapLongClick(map)
         setMarkerClick(map)
         enableMyLocation()
+
+        val appSingleton = application as ApplicationSingleton
+        viewModel = MapsViewModel(appSingleton.firestore!!)
+        viewModel.reportList.observe(this, Observer {
+            // TODO
+            // Add path and pins
+            // addPins(it)
+        })
     }
 
     // Initializes contents of Activity's standard options menu. Only called the first time options

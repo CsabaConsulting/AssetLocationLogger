@@ -4,7 +4,15 @@ import android.util.Log
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import dev.csaba.diygpsmanager.data.remote.*
+import dev.csaba.diygpsmanager.data.remote.getUnlockLocation
+import dev.csaba.diygpsmanager.data.remote.mapToAsset
+import dev.csaba.diygpsmanager.data.remote.mapToAssetData
+import dev.csaba.diygpsmanager.data.remote.mapToLockLocation
+import dev.csaba.diygpsmanager.data.remote.mapToLockRadiusUpdate
+import dev.csaba.diygpsmanager.data.remote.mapToPeriodIntervalUpdate
+import dev.csaba.diygpsmanager.data.remote.mapToReport
+import dev.csaba.diygpsmanager.data.remote.RemoteAsset
+import dev.csaba.diygpsmanager.data.remote.RemoteReport
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.ObservableEmitter
@@ -39,7 +47,7 @@ class FirestoreAssetRepository(secondaryDB: FirebaseFirestore) : IAssetRepositor
                     }
 
                     value.documentChanges.forEach {
-                        Log.d("FirestoreAssetRepo", "Data changed type ${it.type} document ${it.document.id}")
+                        Log.d(TAG, "Data changed type ${it.type} document ${it.document.id}")
                     }
                 }
 
@@ -177,7 +185,7 @@ class FirestoreAssetRepository(secondaryDB: FirebaseFirestore) : IAssetRepositor
         return Completable.create { emitter ->
             remoteDB.collection(ASSET_COLLECTION)
                 .document(assetId)
-                .update(mapLockRadiusUpdate(lockRadius * 25))
+                .update(mapToLockRadiusUpdate(lockRadius * 25))
                 .addOnSuccessListener {
                     if (!emitter.isDisposed) {
                         emitter.onComplete()
@@ -195,7 +203,7 @@ class FirestoreAssetRepository(secondaryDB: FirebaseFirestore) : IAssetRepositor
         return Completable.create { emitter ->
             remoteDB.collection(ASSET_COLLECTION)
                 .document(assetId)
-                .update(mapPeriodIntervalUpdate(periodIntervalProgress))
+                .update(mapToPeriodIntervalUpdate(periodIntervalProgress))
                 .addOnSuccessListener {
                     if (!emitter.isDisposed) {
                         emitter.onComplete()

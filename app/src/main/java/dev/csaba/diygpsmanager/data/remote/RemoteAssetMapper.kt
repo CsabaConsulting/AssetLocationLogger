@@ -47,7 +47,7 @@ fun mapToAssetData(asset: Asset): HashMap<String, Any> {
     )
 }
 
-fun mapLockRadiusUpdate(lockRadius: Int): HashMap<String, Any> {
+fun mapToLockRadiusUpdate(lockRadius: Int): HashMap<String, Any> {
     return hashMapOf(
         "lockRadius" to lockRadius,
         "updated" to mapDateToTimestamp(Date())
@@ -77,7 +77,7 @@ fun mapPeriodIntervalProgressToSeconds(periodIntervalProgress: Int): Int {
     return intervals[periodIntervalProgress]
 }
 
-fun mapPeriodIntervalUpdate(periodIntervalProgress: Int): HashMap<String, Any> {
+fun mapToPeriodIntervalUpdate(periodIntervalProgress: Int): HashMap<String, Any> {
     return hashMapOf(
         "periodInterval" to mapPeriodIntervalProgressToSeconds(periodIntervalProgress),
         "updated" to mapDateToTimestamp(Date())
