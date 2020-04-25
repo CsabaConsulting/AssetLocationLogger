@@ -13,16 +13,21 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.os.ConfigurationCompat
 import androidx.lifecycle.Observer
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.*
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.PolylineOptions
 import dev.csaba.diygpsmanager.ApplicationSingleton
 import dev.csaba.diygpsmanager.R
 import dev.csaba.diygpsmanager.data.Report
 import dev.csaba.diygpsmanager.viewmodel.MapsViewModel
+import java.text.SimpleDateFormat
 
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
@@ -74,12 +79,15 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         for (pin in pins) {
             val latLng = LatLng(pin.lat, pin.lon)
+            // TODO: don't record too close consecutive markers (avoid unnecessary crowding)
             options.add(latLng)
-            val date = pin.created.date.toString()
-            val time = pin.created.time.toString()
-            val marker = MarkerOptions().position(latLng).title(time)
-                .snippet(date)
 
+            val currentLocale = ConfigurationCompat.getLocales(resources.configuration)[0]
+            val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd", currentLocale)
+            val dateString = simpleDateFormat.format(pin.created)
+            val simpleTimeFormat = SimpleDateFormat("HH:mm:ss", currentLocale)
+            val timeString = simpleTimeFormat.format(pin.created)
+            val marker = MarkerOptions().position(latLng).title(timeString).snippet(dateString)
             map.addMarker(marker)
         }
 
