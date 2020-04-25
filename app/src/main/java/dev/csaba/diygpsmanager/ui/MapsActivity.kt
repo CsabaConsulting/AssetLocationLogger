@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
@@ -17,10 +18,10 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.*
 import dev.csaba.diygpsmanager.ApplicationSingleton
 import dev.csaba.diygpsmanager.R
+import dev.csaba.diygpsmanager.data.Report
 import dev.csaba.diygpsmanager.viewmodel.MapsViewModel
 
 
@@ -62,11 +63,32 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         if (assetId != null && appSingleton.firestore != null) {
             viewModel = MapsViewModel(appSingleton.firestore!!, assetId)
             viewModel.reportList.observe(this, Observer {
-                // TODO
-                // Add path and pins
-                // addPins(it)
+                addPins(it)
             })
         }
+    }
+
+    fun addPins(pins: List<Report>) {
+        val options = PolylineOptions()
+        options.color(Color.RED)
+
+        for (pin in pins) {
+            val latLng = LatLng(pin.lat, pin.lon)
+            options.add(latLng)
+            val date = pin.created.date.toString()
+            val time = pin.created.time.toString()
+            val marker = MarkerOptions().position(latLng).title(time)
+                .snippet(date)
+
+            map.addMarker(marker)
+        }
+
+        map.addPolyline(options)
+
+//        val cameraPosition = CameraPosition.Builder()
+//            .target(LatLng(pins[0].lat, pins[0].lon))
+//            .zoom(18f).build()
+//        map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
     }
 
     // Initializes contents of Activity's standard options menu. Only called the first time options
@@ -146,7 +168,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 val userLat = lastKnownLocation?.latitude ?: 37.422160
                 val userLong = lastKnownLocation?.longitude ?: -122.084270
                 val userLatLng = LatLng(userLat, userLong)
-                map.moveCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, 10f))
+                map.animateCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, 10f))
             }
         } else {
             ActivityCompat.requestPermissions(
