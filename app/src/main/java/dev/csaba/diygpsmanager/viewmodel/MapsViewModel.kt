@@ -14,7 +14,7 @@ import dev.csaba.diygpsmanager.data.IReportRepository
 import dev.csaba.diygpsmanager.data.Report
 
 
-class MapsViewModel(firestore: FirebaseFirestore) : ViewModel() {
+class MapsViewModel(firestore: FirebaseFirestore, assetId: String) : ViewModel() {
 
     private val _reportList = MutableLiveData<List<Report>>()
     val reportList: LiveData<List<Report>>
@@ -25,7 +25,7 @@ class MapsViewModel(firestore: FirebaseFirestore) : ViewModel() {
     private val disposable = CompositeDisposable()
 
     init {
-        repository = FirestoreReportRepository(firestore)
+        repository = FirestoreReportRepository(firestore, assetId)
         repository.getChangeObservable()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe (
@@ -40,7 +40,9 @@ class MapsViewModel(firestore: FirebaseFirestore) : ViewModel() {
     }
 
     fun addReport(position: LatLng, battery: Double) {
-        repository.addReport(Report("${System.currentTimeMillis()}", position.latitude, position.longitude, battery))
+        repository.addReport(
+            Report("${System.currentTimeMillis()}", position.latitude, position.longitude, battery)
+        )
             .subscribeOn(Schedulers.io())
             .subscribe(
                 {},

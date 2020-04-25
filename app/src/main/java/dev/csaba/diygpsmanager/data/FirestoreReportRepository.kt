@@ -4,7 +4,9 @@ import android.util.Log
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import dev.csaba.diygpsmanager.data.remote.*
+import dev.csaba.diygpsmanager.data.remote.mapToReport
+import dev.csaba.diygpsmanager.data.remote.mapToReportData
+import dev.csaba.diygpsmanager.data.remote.RemoteReport
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.ObservableEmitter
@@ -13,7 +15,7 @@ import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 
 
-class FirestoreReportRepository(secondaryDB: FirebaseFirestore) : IReportRepository {
+class FirestoreReportRepository(secondaryDB: FirebaseFirestore, assetId: String) : IReportRepository {
 
     companion object {
         private const val TAG = "FirestoreReportRepo"
@@ -23,10 +25,12 @@ class FirestoreReportRepository(secondaryDB: FirebaseFirestore) : IReportReposit
 
     private val remoteDB: FirebaseFirestore = secondaryDB
     private var changeObservable: Observable<List<DocumentSnapshot>>
+    private val _assetId: String = assetId
 
     init {
         changeObservable = BehaviorSubject.create { emitter: ObservableEmitter<List<DocumentSnapshot>> ->
             val listeningRegistration = remoteDB.collection(ASSET_COLLECTION)
+                .document(_assetId).collection(REPORT_COLLECTION)
                 .addSnapshotListener { value, error ->
                     if (value == null || error != null) {
                         return@addSnapshotListener
@@ -47,10 +51,10 @@ class FirestoreReportRepository(secondaryDB: FirebaseFirestore) : IReportReposit
 
     private fun mapDocumentToRemoteReport(document: DocumentSnapshot) = document.toObject(RemoteReport::class.java)!!.apply { id = document.id }
 
-    override fun getAllReports(asset: Asset): Single<List<Report>> {
+    override fun getAllReports(): Single<List<Report>> {
         return Single.create<List<DocumentSnapshot>> { emitter ->
             remoteDB.collection(ASSET_COLLECTION)
-                .document(asset.id).collection(REPORT_COLLECTION)
+                .document(_assetId).collection(REPORT_COLLECTION)
                 .orderBy("created", Query.Direction.ASCENDING)
                 .get()
                 .addOnSuccessListener {
@@ -71,11 +75,11 @@ class FirestoreReportRepository(secondaryDB: FirebaseFirestore) : IReportReposit
             .toList()
     }
 
-    override fun addReport(asset: Asset, report: Report): Completable {
+    override fun addReport(report: Report): Completable {
         return Completable.create { emitter ->
             remoteDB.collection(ASSET_COLLECTION)
-                .document(asset.id).collection(REPORT_COLLECTION)
-                .add(mapToAssetData(asset))
+                .document(_assetId).collection(REPORT_COLLECTION)
+                .add(mapToReportData(report))
                 .addOnSuccessListener {
                     it.collection(REPORT_COLLECTION)
                     if (!emitter.isDisposed) {

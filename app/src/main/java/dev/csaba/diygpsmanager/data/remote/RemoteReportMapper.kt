@@ -1,7 +1,7 @@
 package dev.csaba.diygpsmanager.data.remote
 
 import dev.csaba.diygpsmanager.data.Report
-import java.util.*
+import java.util.Date
 import kotlin.collections.HashMap
 
 

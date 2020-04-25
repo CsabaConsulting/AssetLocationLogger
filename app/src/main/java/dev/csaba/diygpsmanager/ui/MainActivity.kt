@@ -163,6 +163,7 @@ class MainActivity : AppCompatActivityWithActionBar(), OnAssetInputListener {
 
     override fun onTrackClick(assetId: String) {
         val intent = Intent(this, MapsActivity::class.java)
+        intent.putExtra("assetId", assetId)
         startActivity(intent)
     }
 

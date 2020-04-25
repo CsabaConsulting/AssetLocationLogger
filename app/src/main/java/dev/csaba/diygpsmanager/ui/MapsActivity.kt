@@ -58,12 +58,15 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         enableMyLocation()
 
         val appSingleton = application as ApplicationSingleton
-        viewModel = MapsViewModel(appSingleton.firestore!!)
-        viewModel.reportList.observe(this, Observer {
-            // TODO
-            // Add path and pins
-            // addPins(it)
-        })
+        val assetId = intent.getStringExtra("assetId")
+        if (assetId != null && appSingleton.firestore != null) {
+            viewModel = MapsViewModel(appSingleton.firestore!!, assetId)
+            viewModel.reportList.observe(this, Observer {
+                // TODO
+                // Add path and pins
+                // addPins(it)
+            })
+        }
     }
 
     // Initializes contents of Activity's standard options menu. Only called the first time options
