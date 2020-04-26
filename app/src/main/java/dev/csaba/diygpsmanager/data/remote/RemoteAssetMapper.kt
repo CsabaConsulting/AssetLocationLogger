@@ -2,6 +2,7 @@ package dev.csaba.diygpsmanager.data.remote
 
 import com.google.firebase.Timestamp
 import dev.csaba.diygpsmanager.data.Asset
+import dev.csaba.diygpsmanager.data.mapValueToInterval
 import java.util.Date
 
 
@@ -70,14 +71,7 @@ fun mapPeriodIntervalToProgress(periodInterval: Int): Int {
 
 fun mapPeriodIntervalProgressToSeconds(periodIntervalProgress: Int): Int {
     val intervals = intArrayOf(0, 10, 60, 600, 3600, 86400)
-
-    if (periodIntervalProgress < 0)
-        return intervals.first()
-
-    if (periodIntervalProgress >= intervals.size)
-        return intervals.last()
-
-    return intervals[periodIntervalProgress]
+    return mapValueToInterval(intervals, periodIntervalProgress)
 }
 
 fun mapToPeriodIntervalUpdate(periodIntervalProgress: Int): HashMap<String, Any> {

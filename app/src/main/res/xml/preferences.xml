@@ -37,6 +37,15 @@
         app:summary="@string/google_auth_help"
         android:icon="@drawable/ic_identity"/>
 
+    <SeekBarPreference
+        android:key="report_history"
+        android:title="@string/report_history"
+        android:summary="@string/report_history_help"
+        app:defaultValue="0"
+        app:min="0"
+        app:max="8"
+        android:icon="@drawable/ic_history"/>
+
     <Preference
         android:key="connect_button"
         android:persistent="false"

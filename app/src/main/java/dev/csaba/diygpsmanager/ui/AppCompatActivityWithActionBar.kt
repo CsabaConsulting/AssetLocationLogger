@@ -6,7 +6,7 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
 import dev.csaba.diygpsmanager.R
-import dev.csaba.diygpsmanager.data.hasConfiguration
+import dev.csaba.diygpsmanager.data.hasAuthConfiguration
 
 abstract class AppCompatActivityWithActionBar : AppCompatActivity() {
 
@@ -23,7 +23,7 @@ abstract class AppCompatActivityWithActionBar : AppCompatActivity() {
             startActivity(intent)
             return true
         } else if (item.itemId == R.id.assets_menu_button) {
-            if (!this.hasConfiguration()) {
+            if (!this.hasAuthConfiguration()) {
                 Snackbar.make(
                     window.decorView.rootView,
                     getString(R.string.uncofigured_firestore),

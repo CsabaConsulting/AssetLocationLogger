@@ -8,7 +8,7 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.google.android.material.snackbar.Snackbar
 import dev.csaba.diygpsmanager.R
-import dev.csaba.diygpsmanager.data.hasConfiguration
+import dev.csaba.diygpsmanager.data.hasAuthConfiguration
 
 
 class SettingsFragment : PreferenceFragmentCompat() {
@@ -30,7 +30,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
             openBrowserWindow(getString(R.string.home_page_url), context)
             return true
         } else if (preference.key == getString(R.string.connect_key)) {
-            if (!requireActivity().hasConfiguration()) {
+            if (!requireActivity().hasAuthConfiguration()) {
                 Snackbar.make(
                     requireView(),
                     getString(R.string.uncofigured_firestore),

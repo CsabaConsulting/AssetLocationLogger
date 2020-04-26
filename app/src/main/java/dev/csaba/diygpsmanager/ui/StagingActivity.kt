@@ -8,7 +8,7 @@ import android.text.method.LinkMovementMethod
 import android.widget.Button
 import android.widget.TextView
 import dev.csaba.diygpsmanager.R
-import dev.csaba.diygpsmanager.data.hasConfiguration
+import dev.csaba.diygpsmanager.data.hasAuthConfiguration
 
 
 class StagingActivity : AppCompatActivityWithActionBar() {
@@ -17,7 +17,7 @@ class StagingActivity : AppCompatActivityWithActionBar() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_staging)
 
-        if (hasConfiguration()) {
+        if (hasAuthConfiguration()) {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
