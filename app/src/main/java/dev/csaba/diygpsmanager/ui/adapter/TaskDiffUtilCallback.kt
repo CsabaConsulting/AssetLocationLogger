@@ -17,6 +17,7 @@ class AssetDiffUtilCallback(
 
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
         return oldList[oldItemPosition].title == newList[newItemPosition].title &&
+                oldList[oldItemPosition].lock == newList[newItemPosition].lock &&
                 oldList[oldItemPosition].lockLat == newList[newItemPosition].lockLat &&
                 oldList[oldItemPosition].lockLon == newList[newItemPosition].lockLon &&
                 oldList[oldItemPosition].lockRadius == newList[newItemPosition].lockRadius &&

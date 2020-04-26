@@ -167,8 +167,8 @@ class MainActivity : AppCompatActivityWithActionBar(), OnAssetInputListener {
         startActivity(intent)
     }
 
-    override fun onLockUnlockClick(assetId: String) {
-        viewModel.lockUnlockAsset(assetId)
+    override fun onFlipAssetLockClick(assetId: String, lockState: Boolean) {
+        viewModel.flipAssetLockState(assetId, lockState)
     }
 
     override fun onDeleteClick(assetId: String) {

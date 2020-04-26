@@ -20,10 +20,25 @@ class AssetAdapter(private val assetInputListener: OnAssetInputListener?) : Recy
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AssetViewHolder {
         inputListener = assetInputListener
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.recycler_item, parent, false)
-        view.trackAsset.setOnClickListener { button -> assetInputListener?.run { this.onTrackClick(button.tag as String) } }
-        view.lockUnlockAsset.setOnClickListener { button -> assetInputListener?.run { this.onLockUnlockClick(button.tag as String) } }
-        view.deleteAsset.setOnClickListener { button -> assetInputListener?.run { this.onDeleteClick(button.tag as String) } }
+        val view = LayoutInflater.from(parent.context).inflate(
+            R.layout.recycler_item, parent, false
+        )
+        view.trackAsset.setOnClickListener {
+            button -> assetInputListener?.run {
+                this.onTrackClick(button.tag as String)
+            }
+        }
+        view.flipAssetLock.setOnClickListener {
+            button -> assetInputListener?.run {
+                val assetParts = (button.tag as String).split("_")
+                this.onFlipAssetLockClick(assetParts[1], assetParts[0] == "l")
+            }
+        }
+        view.deleteAsset.setOnClickListener {
+            button -> assetInputListener?.run {
+                this.onDeleteClick(button.tag as String)
+            }
+        }
         view.assetLockRadiusSeekBar.setOnSeekBarChangeListener(this)
         view.assetPeriodIntervalSeekBar.setOnSeekBarChangeListener(this)
         return AssetViewHolder(view)
@@ -45,10 +60,11 @@ class AssetAdapter(private val assetInputListener: OnAssetInputListener?) : Recy
             val assetTag = assetList[position].id
             trackAsset.tag = assetTag
             val locked = Math.abs(asset.lockLat) > 1e-6 && Math.abs(asset.lockLon) > 1e-6
-            lockUnlockAsset.setIconResource(
+            flipAssetLock.setIconResource(
                 if (locked) R.drawable.ic_lock_closed else R.drawable.ic_lock_open
             )
-            lockUnlockAsset.tag = assetTag
+            val lockAssetPrefix = if (locked) "l_" else "u_"
+            flipAssetLock.tag = "${lockAssetPrefix}_${assetTag}"
             deleteAsset.tag = assetTag
             assetLockRadiusSeekBar.tag = "r_${assetTag}"
             assetPeriodIntervalSeekBar.tag = "i_${assetTag}"
@@ -87,7 +103,7 @@ class AssetViewHolder(override val containerView: View): RecyclerView.ViewHolder
 
 interface OnAssetInputListener {
     fun onTrackClick(assetId: String)
-    fun onLockUnlockClick(assetId: String)
+    fun onFlipAssetLockClick(assetId: String, lockState: Boolean)
     fun onDeleteClick(assetId: String)
     fun onLockRadiusChange(assetId: String, lockRadius: Int)
     fun onPeriodIntervalChange(assetId: String, periodIntervalProgress: Int)

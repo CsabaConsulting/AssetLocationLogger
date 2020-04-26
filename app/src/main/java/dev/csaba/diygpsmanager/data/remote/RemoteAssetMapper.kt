@@ -9,6 +9,7 @@ fun mapToAsset(remoteAsset: RemoteAsset): Asset {
     return Asset(
         remoteAsset.id,
         remoteAsset.title,
+        remoteAsset.lock,
         remoteAsset.lockLat,
         remoteAsset.lockLon,
         remoteAsset.lockRadius,
@@ -26,6 +27,7 @@ fun mapToRemoteAsset(asset: Asset): RemoteAsset {
     return RemoteAsset(
         asset.id,
         asset.title,
+        asset.lock,
         asset.lockLat,
         asset.lockLon,
         asset.lockRadius,
@@ -38,6 +40,7 @@ fun mapToRemoteAsset(asset: Asset): RemoteAsset {
 fun mapToAssetData(asset: Asset): HashMap<String, Any> {
     return hashMapOf(
         "title" to asset.title,
+        "lock" to asset.lock,
         "lockLat" to asset.lockLat,
         "lockLon" to asset.lockLon,
         "lockRadius" to asset.lockRadius,
@@ -81,5 +84,12 @@ fun mapToPeriodIntervalUpdate(periodIntervalProgress: Int): HashMap<String, Any>
     return hashMapOf(
         "periodInterval" to mapPeriodIntervalProgressToSeconds(periodIntervalProgress),
         "updated" to mapDateToTimestamp(Date())
+    )
+}
+
+fun getLockUpdate(lockState: Boolean): HashMap<String, Any> {
+    return hashMapOf(
+        "lock" to lockState,
+        "modified" to mapDateToTimestamp(Date())
     )
 }

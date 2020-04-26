@@ -4,15 +4,12 @@ import android.util.Log
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import dev.csaba.diygpsmanager.data.remote.getUnlockLocation
+import dev.csaba.diygpsmanager.data.remote.getLockUpdate
 import dev.csaba.diygpsmanager.data.remote.mapToAsset
 import dev.csaba.diygpsmanager.data.remote.mapToAssetData
-import dev.csaba.diygpsmanager.data.remote.mapToLockLocation
 import dev.csaba.diygpsmanager.data.remote.mapToLockRadiusUpdate
 import dev.csaba.diygpsmanager.data.remote.mapToPeriodIntervalUpdate
-import dev.csaba.diygpsmanager.data.remote.mapToReport
 import dev.csaba.diygpsmanager.data.remote.RemoteAsset
-import dev.csaba.diygpsmanager.data.remote.RemoteReport
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.ObservableEmitter
@@ -117,63 +114,19 @@ class FirestoreAssetRepository(secondaryDB: FirebaseFirestore) : IAssetRepositor
         }
     }
 
-    private fun mapDocumentToRemoteReport(document: DocumentSnapshot) = document.toObject(RemoteReport::class.java)!!.apply { id = document.id }
-
-    override fun lockUnlockAsset(assetId: String): Completable {
-        Log.d(TAG, "lockUnlockAsset")
+    override fun flipAssetLockState(assetId: String, lockState: Boolean): Completable {
         return Completable.create { emitter ->
             remoteDB.collection(ASSET_COLLECTION)
                 .document(assetId)
-                .get()
+                .update(getLockUpdate(!lockState))
                 .addOnSuccessListener {
-                    Log.d(TAG, "Locking/Unlocking 1")
-                    val remoteAsset = mapDocumentToRemoteAsset(it)
-                    if (Math.abs(remoteAsset.lockLat) > 1e-6 && Math.abs(remoteAsset.lockLon) > 1e-6) {
-                        Log.d(TAG, "Unlocking...")
-                        it.reference.update(getUnlockLocation())
-                            .addOnSuccessListener {
-                                Log.d(TAG, "Unlocked!")
-                                if (!emitter.isDisposed) {
-                                    emitter.onComplete()
-                                }
-                            }
-                            .addOnFailureListener {
-                                Log.d(TAG, "Unlocking fail")
-                                if (!emitter.isDisposed) {
-                                    emitter.onError(it)
-                                }
-                            }
-                    } else {
-                        val assetReference = it.reference
-                        Log.d(TAG, "Getting latest location for locking...")
-                        assetReference.collection(REPORT_COLLECTION).orderBy("created", Query.Direction.DESCENDING).limit(1).get()
-                            .addOnSuccessListener {
-                                val report = mapDocumentToRemoteReport(it.documents[0])
-                                Log.d(TAG, "Locking at ${report.lat}, ${report.lon}")
-                                assetReference.update(mapToLockLocation(mapToReport(report)))
-                                    .addOnSuccessListener {
-                                        Log.d(TAG, "Locked!")
-                                        if (!emitter.isDisposed) {
-                                            emitter.onComplete()
-                                        }
-                                    }
-                                    .addOnFailureListener {
-                                        Log.d(TAG, "Locking fail")
-                                        if (!emitter.isDisposed) {
-                                            emitter.onError(it)
-                                        }
-                                    }
-                            }
-                            .addOnFailureListener {
-                                Log.d(TAG, "Could not find latest location for locking")
-                                if (!emitter.isDisposed) {
-                                    emitter.onError(it)
-                                }
-                            }
+                    Log.d(TAG, "Unlocked!")
+                    if (!emitter.isDisposed) {
+                        emitter.onComplete()
                     }
                 }
                 .addOnFailureListener {
-                    Log.d(TAG, "Could not find asset to unlock")
+                    Log.d(TAG, "Unlocking fail")
                     if (!emitter.isDisposed) {
                         emitter.onError(it)
                     }

@@ -41,11 +41,3 @@ fun mapToLockLocation(report: Report): HashMap<String, Any> {
         "modified" to mapDateToTimestamp(Date())
     )
 }
-
-fun getUnlockLocation(): HashMap<String, Any> {
-    return hashMapOf(
-        "lockLat" to 0.0,
-        "lockLon" to 0.0,
-        "modified" to mapDateToTimestamp(Date())
-    )
-}
