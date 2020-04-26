@@ -32,11 +32,13 @@ import java.text.SimpleDateFormat
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
-    private lateinit var map: GoogleMap
-    private val REQUEST_LOCATION_PERMISSION = 1
-    private var isRestore: Boolean = false
+    companion object {
+        private const val REQUEST_LOCATION_PERMISSION = 1
+    }
 
+    private lateinit var map: GoogleMap
     private lateinit var viewModel: MapsViewModel
+    private var isRestore = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,16 +79,26 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val options = PolylineOptions()
         options.color(Color.RED)
 
+        var lastLocation = LatLng(.0, .0)
         for (pin in pins) {
             val latLng = LatLng(pin.lat, pin.lon)
-            // TODO: don't record too close consecutive markers (avoid unnecessary crowding)
+
+            // Don't record too close consecutive markers (avoid unnecessary crowding)
+            // 10^-5 is about 1.1m (https://en.wikipedia.org/wiki/Decimal_degrees)
+            if (Math.abs(lastLocation.latitude) > 1e-6 && Math.abs(lastLocation.longitude) > 1e-6 ||
+                Math.abs(lastLocation.latitude - latLng.latitude) < 1e-5 &&
+                Math.abs(lastLocation.longitude - latLng.longitude) < 1e-5)
+            {
+                continue
+            }
+            lastLocation = latLng
             options.add(latLng)
 
             val currentLocale = ConfigurationCompat.getLocales(resources.configuration)[0]
-            val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd", currentLocale)
-            val dateString = simpleDateFormat.format(pin.created)
-            val simpleTimeFormat = SimpleDateFormat("HH:mm:ss", currentLocale)
-            val timeString = simpleTimeFormat.format(pin.created)
+            val dateFormat = SimpleDateFormat("yyyy-MM-dd", currentLocale)
+            val dateString = dateFormat.format(pin.created)
+            val timeFormat = SimpleDateFormat("HH:mm:ss", currentLocale)
+            val timeString = timeFormat.format(pin.created)
             val marker = MarkerOptions().position(latLng).title(timeString).snippet(dateString)
             map.addMarker(marker)
         }
