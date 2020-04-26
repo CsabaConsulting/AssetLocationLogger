@@ -55,7 +55,7 @@ fun mapToLockRadiusUpdate(lockRadius: Int): HashMap<String, Any> {
 }
 
 fun mapPeriodIntervalToProgress(periodInterval: Int): Int {
-    val intervals = intArrayOf(0, 1, 10, 60, 600, 3600, 86400)
+    val intervals = intArrayOf(0, 10, 60, 600, 3600, 86400)
 
     for ((index, interval) in intervals.withIndex()) {
         if (periodInterval <= interval)
@@ -66,7 +66,7 @@ fun mapPeriodIntervalToProgress(periodInterval: Int): Int {
 }
 
 fun mapPeriodIntervalProgressToSeconds(periodIntervalProgress: Int): Int {
-    val intervals = intArrayOf(0, 1, 10, 60, 600, 3600, 86400)
+    val intervals = intArrayOf(0, 10, 60, 600, 3600, 86400)
 
     if (periodIntervalProgress < 0)
         return intervals.first()
