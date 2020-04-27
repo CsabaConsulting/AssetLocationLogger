@@ -39,6 +39,7 @@ class MainActivity : AppCompatActivityWithActionBar(), OnAssetInputListener {
     private lateinit var viewModel: MainViewModel
     private val assetAdapter = AssetAdapter(this)
     private lateinit var auth: FirebaseAuth
+    private var lookBackMinutes: Int = 10
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,6 +49,7 @@ class MainActivity : AppCompatActivityWithActionBar(), OnAssetInputListener {
 
         val appSingleton = application as ApplicationSingleton
         val projectConfiguration = this.getSecondaryFirebaseConfiguration()
+        lookBackMinutes = projectConfiguration.lookBackMinutes
         // Get or initialize secondary FirebaseApp.
         if (appSingleton.firebaseApp == null) {
             val options = FirebaseOptions.Builder()
@@ -164,6 +166,7 @@ class MainActivity : AppCompatActivityWithActionBar(), OnAssetInputListener {
     override fun onTrackClick(assetId: String) {
         val intent = Intent(this, MapsActivity::class.java)
         intent.putExtra("assetId", assetId)
+        intent.putExtra("lookBackMinutes", lookBackMinutes)
         startActivity(intent)
     }
 

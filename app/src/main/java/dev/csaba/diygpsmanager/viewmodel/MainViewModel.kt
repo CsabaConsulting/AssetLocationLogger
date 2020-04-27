@@ -19,12 +19,11 @@ class MainViewModel(firestore: FirebaseFirestore) : ViewModel() {
     val assetList: LiveData<List<Asset>>
         get() = _assetList
 
-    private var repository: IAssetRepository
+    private var repository: IAssetRepository = FirestoreAssetRepository(firestore)
 
     private val disposable = CompositeDisposable()
 
     init {
-        repository = FirestoreAssetRepository(firestore)
         repository.getChangeObservable()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe (

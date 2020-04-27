@@ -26,12 +26,10 @@ class FirestoreAssetRepository(secondaryDB: FirebaseFirestore) : IAssetRepositor
         private const val REPORT_COLLECTION = "Reports"
     }
 
-    private var remoteDB: FirebaseFirestore
+    private var remoteDB: FirebaseFirestore = secondaryDB
     private var changeObservable: Observable<List<DocumentSnapshot>>
 
     init {
-        remoteDB = secondaryDB
-
         changeObservable = BehaviorSubject.create { emitter: ObservableEmitter<List<DocumentSnapshot>> ->
             val listeningRegistration = remoteDB.collection(ASSET_COLLECTION)
                 .addSnapshotListener { value, error ->

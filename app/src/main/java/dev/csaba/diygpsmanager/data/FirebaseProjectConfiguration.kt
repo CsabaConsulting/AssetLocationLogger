@@ -6,5 +6,5 @@ data class FirebaseProjectConfiguration(
     var applicationId: String = "",
     var apiKey: String = "",
     var googleAuth: Boolean = false,
-    var reportHistory: Int = 10
+    var lookBackMinutes: Int = 10
 )

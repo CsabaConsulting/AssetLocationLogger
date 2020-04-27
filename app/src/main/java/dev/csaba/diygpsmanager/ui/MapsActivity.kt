@@ -68,7 +68,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val appSingleton = application as ApplicationSingleton
         val assetId = intent.getStringExtra("assetId")
         if (assetId != null && appSingleton.firestore != null) {
-            viewModel = MapsViewModel(appSingleton.firestore!!, assetId)
+            val lookBackMinutes = intent.getIntExtra("lookBackMinutes", 10)
+            viewModel = MapsViewModel(appSingleton.firestore!!, assetId, lookBackMinutes)
             viewModel.reportList.observe(this, Observer {
                 addPins(it)
             })
