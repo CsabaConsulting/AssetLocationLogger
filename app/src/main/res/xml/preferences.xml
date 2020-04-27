@@ -37,13 +37,13 @@
         app:summary="@string/google_auth_help"
         android:icon="@drawable/ic_identity"/>
 
-    <SeekBarPreference
-        android:key="report_history"
-        android:title="@string/report_history"
-        android:summary="@string/report_history_help"
-        app:defaultValue="0"
-        app:min="0"
-        app:max="8"
+    <DropDownPreference
+        android:key="look_back_minutes"
+        android:title="@string/look_back_minutes"
+        android:summary="@string/look_back_minutes_help"
+        android:entries="@array/look_back_minutes_display"
+        android:entryValues="@array/look_back_minutes_value"
+        android:defaultValue="10"
         android:icon="@drawable/ic_history"/>
 
     <Preference

@@ -19,11 +19,6 @@ fun mapValueToInterval(intervals: IntArray, value: Int): Int {
     return intervals[value]
 }
 
-fun mapReportHistorySeekBarToMinutes(seekBarValue: Int): Int {
-    val intervals = intArrayOf(10, 60, 1440, 2880, 4320, 7200, 14400)
-    return mapValueToInterval(intervals, seekBarValue)
-}
-
 fun FragmentActivity.getSecondaryFirebaseConfiguration(): FirebaseProjectConfiguration {
     val preferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
     return FirebaseProjectConfiguration(
@@ -31,7 +26,7 @@ fun FragmentActivity.getSecondaryFirebaseConfiguration(): FirebaseProjectConfigu
         getPreferenceString(preferences, "application_id"),
         getPreferenceString(preferences, "api_key"),
         preferences.getBoolean("auth_type", false),
-        mapReportHistorySeekBarToMinutes(preferences.getInt("report_history", 0))
+        preferences.getInt("look_back_minutes", 10)
     )
 }
 
