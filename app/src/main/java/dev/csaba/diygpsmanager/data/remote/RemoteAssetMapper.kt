@@ -1,6 +1,7 @@
 package dev.csaba.diygpsmanager.data.remote
 
 import com.google.firebase.Timestamp
+import com.google.firebase.firestore.FieldValue
 import dev.csaba.diygpsmanager.data.Asset
 import dev.csaba.diygpsmanager.data.mapValueToInterval
 import java.util.Date
@@ -46,15 +47,15 @@ fun mapToAssetData(asset: Asset): HashMap<String, Any> {
         "lockLon" to asset.lockLon,
         "lockRadius" to asset.lockRadius,
         "periodInterval" to asset.periodInterval,
-        "created" to mapDateToTimestamp(asset.created),
-        "updated" to mapDateToTimestamp(asset.updated)
+        "created" to FieldValue.serverTimestamp(),
+        "updated" to FieldValue.serverTimestamp()
     )
 }
 
 fun mapToLockRadiusUpdate(lockRadius: Int): HashMap<String, Any> {
     return hashMapOf(
         "lockRadius" to lockRadius,
-        "updated" to mapDateToTimestamp(Date())
+        "updated" to FieldValue.serverTimestamp()
     )
 }
 
@@ -77,13 +78,13 @@ fun mapPeriodIntervalProgressToSeconds(periodIntervalProgress: Int): Int {
 fun mapToPeriodIntervalUpdate(periodIntervalProgress: Int): HashMap<String, Any> {
     return hashMapOf(
         "periodInterval" to mapPeriodIntervalProgressToSeconds(periodIntervalProgress),
-        "updated" to mapDateToTimestamp(Date())
+        "updated" to FieldValue.serverTimestamp()
     )
 }
 
 fun getLockUpdate(lockState: Boolean): HashMap<String, Any> {
     return hashMapOf(
         "lock" to lockState,
-        "modified" to mapDateToTimestamp(Date())
+        "updated" to FieldValue.serverTimestamp()
     )
 }
