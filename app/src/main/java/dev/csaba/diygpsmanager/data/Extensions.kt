@@ -26,7 +26,7 @@ fun FragmentActivity.getSecondaryFirebaseConfiguration(): FirebaseProjectConfigu
         getPreferenceString(preferences, "application_id"),
         getPreferenceString(preferences, "api_key"),
         preferences.getBoolean("auth_type", false),
-        preferences.getInt("look_back_minutes", 10)
+        preferences.getString("look_back_minutes", "10")!!.toInt()
     )
 }
 
