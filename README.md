@@ -15,7 +15,7 @@ The intended use:
 My use-case:
 
 * I'll use the apps for theft recovery measures.
-* The tracker devices will be resgitered under my account as child phones and I'll use [Google Family Link](https://families.google.com/familylink/) as a fall-back plan in case the tracker app would stop working. This will also ensure that in case of a failed recovery, the device won't provide any personal information since my Google accoutn won't be present on it.
+* The tracker devices will be resgitered under my account as child phones and I'll use [Google Family Link](https://families.google.com/familylink/) as a fall-back plan in case the tracker app would stop working. This will also ensure that in case of a failed recovery, the device won't provide any personal information since my `Google` account won't be present on it.
 * The tracker device will be hidden so it won't be easy to access its UI. Therefore if the app stops working for some reason, it'll first be restarted itself. To help that, the tracker app should be added to the startup application list, and user has to make sure that the battery saving measures are not applied to it.
 * To help possibly auto-restart I'll use Anonymous login for the tracker application, but surely will use Googel login for the manager application and will configure the database rules keeping that in mind (also towards leats privilege possible).
 * I'm using Google Fi data SIM for the tracker device, that would provide tracking with $0 monthly cost.
