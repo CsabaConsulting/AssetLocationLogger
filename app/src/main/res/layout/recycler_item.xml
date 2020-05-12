@@ -84,7 +84,7 @@
         app:layout_constraintBottom_toTopOf="@id/assetLockRadiusSeekBar"
         android:textSize="12sp"
         android:fontFamily="sans-serif"
-        tools:text="LockLon"
+        tools:text="assetLockLon"
         />
 
     <TextView
