@@ -13,7 +13,7 @@
     <string name="google_auth_title">Authentication Type</string>
     <string name="google_auth_help">On: Google, Off: Anonymous</string>
     <string name="settings_help_key">settings_help</string>
-    <string name="settings_help">Create your own Firestore project to store your own data. For detailed explanation see <a href="https://csabaconsulting.github.io/diygpstracker" target="_blank">DIY GPS Tracker</a></string>
+    <string name="settings_help">Create your own Firestore project to store your own data. For detailed explanation see <a href="https://diygpstracker.github.io/" target="_blank">DIY GPS Tracker</a></string>
     <string name="settings_button_title">Settings</string>
     <string name="privacy_button_title">Privacy Policy</string>
     <string name="help_button_title">Help</string>
@@ -22,10 +22,10 @@
     <string name="connect_help">Click connect to continue</string>
     <string name="look_back_minutes">GPS data look back (mins)</string>
     <string name="look_back_minutes_help">How long the Map looks back in time</string>
-    <string name="home_page_url">https://csabaconsulting.github.io/diygpstracker</string>
-    <string name="privacy_policy_url">https://csabaconsulting.github.io/diygpstracker/privacypolicy</string>
+    <string name="home_page_url">https://diygpstracker.github.io/</string>
+    <string name="privacy_policy_url">https://diygpstracker.github.io/privacypolicy</string>
     <string name="authentication_failed">Authentication failed.</string>
-    <string name="uncofigured_firestore">Firestore not condfigured. Please specify Project ID, Application ID, and API Key then connect.</string>
+    <string name="uncofigured_firestore">Firestore not configured. Please specify Project ID, Application ID, and API Key then connect.</string>
     <string name="asset_button_title">Asset List</string>
     <string name="normal_map">Normal Map</string>
     <string name="hybrid_map">Hybrid Map</string>
