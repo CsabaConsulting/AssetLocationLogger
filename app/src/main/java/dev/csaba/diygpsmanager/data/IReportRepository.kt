@@ -9,7 +9,5 @@ interface IReportRepository {
 
     fun getAllReports(): Single<List<Report>>
 
-    fun addReport(report: Report): Completable
-
     fun getChangeObservable(): Observable<List<Report>>
 }

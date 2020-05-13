@@ -79,25 +79,6 @@ class FirestoreReportRepository(secondaryDB: FirebaseFirestore, assetId: String,
             .toList()
     }
 
-    override fun addReport(report: Report): Completable {
-        return Completable.create { emitter ->
-            remoteDB.collection(ASSET_COLLECTION)
-                .document(_assetId).collection(REPORT_COLLECTION)
-                .add(mapToReportData(report))
-                .addOnSuccessListener {
-                    it.collection(REPORT_COLLECTION)
-                    if (!emitter.isDisposed) {
-                        emitter.onComplete()
-                    }
-                }
-                .addOnFailureListener {
-                    if (!emitter.isDisposed) {
-                        emitter.onError(it)
-                    }
-                }
-        }
-    }
-
     override fun getChangeObservable(): Observable<List<Report>> =
         changeObservable.hide()
             .observeOn(Schedulers.io())

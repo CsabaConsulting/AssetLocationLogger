@@ -38,19 +38,6 @@ class MapsViewModel(firestore: FirebaseFirestore, assetId: String, lookBackMinut
             .addTo(disposable)
     }
 
-    fun addReport(position: LatLng, battery: Double) {
-        repository.addReport(
-            Report("${System.currentTimeMillis()}", position.latitude, position.longitude, battery)
-        )
-            .subscribeOn(Schedulers.io())
-            .subscribe(
-                {},
-                {
-                    it.printStackTrace()
-                })
-            .addTo(disposable)
-    }
-
     override fun onCleared() {
         super.onCleared()
         disposable.clear()
