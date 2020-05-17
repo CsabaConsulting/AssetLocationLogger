@@ -142,7 +142,7 @@ class MainActivity : AppCompatActivityWithActionBar(), OnAssetInputListener {
     }
 
     private fun firebaseAuthWithGoogle(account: GoogleSignInAccount) {
-        Timber.d("firebaseAuthWithGoogle: %s", account.id!!)
+        Timber.d("firebaseAuthWithGoogle: ${account.id!!}")
 
         val credential = GoogleAuthProvider.getCredential(account.idToken, null)
         auth.signInWithCredential(credential)
