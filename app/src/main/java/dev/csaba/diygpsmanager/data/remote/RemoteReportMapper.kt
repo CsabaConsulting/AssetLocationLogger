@@ -30,14 +30,6 @@ fun mapToReportData(report: Report): HashMap<String, Any> {
         "lat" to report.lat,
         "lon" to report.lon,
         "battery" to report.battery,
-        "created" to FieldValue.serverTimestamp()
-    )
-}
-
-fun mapToLockLocation(report: Report): HashMap<String, Any> {
-    return hashMapOf(
-        "lockLat" to report.lat,
-        "lockLon" to report.lon,
-        "updated" to FieldValue.serverTimestamp()
+        "created" to mapDateToTimestamp(report.created)
     )
 }
