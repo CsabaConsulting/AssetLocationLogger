@@ -47,15 +47,15 @@ fun mapToAssetData(asset: Asset): HashMap<String, Any> {
         "lockLon" to asset.lockLon,
         "lockRadius" to asset.lockRadius,
         "periodInterval" to asset.periodInterval,
-        "created" to FieldValue.serverTimestamp(),
-        "updated" to FieldValue.serverTimestamp()
+        "created" to mapDateToTimestamp(asset.created),
+        "updated" to mapDateToTimestamp(asset.updated)
     )
 }
 
 fun mapToLockRadiusUpdate(lockRadius: Int): HashMap<String, Any> {
     return hashMapOf(
         "lockRadius" to lockRadius,
-        "updated" to FieldValue.serverTimestamp()
+        "updated" to mapDateToTimestamp(Date())
     )
 }
 
@@ -78,13 +78,13 @@ fun mapPeriodIntervalProgressToSeconds(periodIntervalProgress: Int): Int {
 fun mapToPeriodIntervalUpdate(periodIntervalProgress: Int): HashMap<String, Any> {
     return hashMapOf(
         "periodInterval" to mapPeriodIntervalProgressToSeconds(periodIntervalProgress),
-        "updated" to FieldValue.serverTimestamp()
+        "updated" to mapDateToTimestamp(Date())
     )
 }
 
 fun getLockUpdate(lockState: Boolean): HashMap<String, Any> {
     return hashMapOf(
         "lock" to lockState,
-        "updated" to FieldValue.serverTimestamp()
+        "updated" to mapDateToTimestamp(Date())
     )
 }
