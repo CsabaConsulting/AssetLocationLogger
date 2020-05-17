@@ -1,6 +1,5 @@
 package dev.csaba.diygpsmanager.data
 
-import android.util.Log
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
@@ -16,12 +15,12 @@ import io.reactivex.ObservableEmitter
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
+import timber.log.Timber
 
 
 class FirestoreAssetRepository(secondaryDB: FirebaseFirestore) : IAssetRepository {
 
     companion object {
-        private val TAG = FirestoreAssetRepository::class.java.simpleName
         private const val ASSET_COLLECTION = "Assets"
         private const val REPORT_COLLECTION = "Reports"
     }
@@ -42,7 +41,7 @@ class FirestoreAssetRepository(secondaryDB: FirebaseFirestore) : IAssetRepositor
                     }
 
                     value.documentChanges.forEach {
-                        Log.d(TAG, "Data changed type ${it.type} document ${it.document.id}")
+                        Timber.d("Data changed type ${it.type} document ${it.document.id}")
                     }
                 }
 
@@ -118,13 +117,13 @@ class FirestoreAssetRepository(secondaryDB: FirebaseFirestore) : IAssetRepositor
                 .document(assetId)
                 .update(getLockUpdate(!lockState))
                 .addOnSuccessListener {
-                    Log.d(TAG, "Unlocked!")
+                    Timber.d("Unlocked!")
                     if (!emitter.isDisposed) {
                         emitter.onComplete()
                     }
                 }
                 .addOnFailureListener {
-                    Log.d(TAG, "Unlocking fail")
+                    Timber.d("Unlocking fail")
                     if (!emitter.isDisposed) {
                         emitter.onError(it)
                     }
