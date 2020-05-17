@@ -19,7 +19,7 @@ import java.time.LocalDateTime
 class FirestoreReportRepository(secondaryDB: FirebaseFirestore, assetId: String, lookBackMinutes: Int) : IReportRepository {
 
     companion object {
-        private const val TAG = "FirestoreReportRepo"
+        private val TAG = FirestoreReportRepository::class.java.simpleName
         private const val ASSET_COLLECTION = "Assets"
         private const val REPORT_COLLECTION = "Reports"
     }
