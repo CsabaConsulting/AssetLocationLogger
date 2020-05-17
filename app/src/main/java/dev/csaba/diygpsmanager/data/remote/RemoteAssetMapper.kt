@@ -1,7 +1,6 @@
 package dev.csaba.diygpsmanager.data.remote
 
 import com.google.firebase.Timestamp
-import com.google.firebase.firestore.FieldValue
 import dev.csaba.diygpsmanager.data.Asset
 import dev.csaba.diygpsmanager.data.mapValueToInterval
 import java.util.Date

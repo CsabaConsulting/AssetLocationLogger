@@ -1,6 +1,5 @@
 package dev.csaba.diygpsmanager.data.remote
 
-import com.google.firebase.firestore.FieldValue
 import dev.csaba.diygpsmanager.data.Report
 import kotlin.collections.HashMap
 
