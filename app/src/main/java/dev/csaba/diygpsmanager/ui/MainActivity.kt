@@ -111,7 +111,7 @@ class MainActivity : AppCompatActivityWithActionBar(), OnAssetInputListener {
                             Timber.d("signInAnonymously:success")
                             populateViewModel(appSingleton.firestore!!)
                         } else {
-                            Timber.w(task.exception, "signInAnonymously:failure")
+                            Timber.e(task.exception, "signInAnonymously:failure")
                             Snackbar.make(
                                 window.decorView.rootView,
                                 applicationContext.getString(R.string.authentication_failed),
