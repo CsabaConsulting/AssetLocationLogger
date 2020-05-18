@@ -71,8 +71,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val assetId = intent.getStringExtra("assetId")
         if (assetId != null && appSingleton.firestore != null) {
             val lookBackMinutes = intent.getIntExtra("lookBackMinutes", 10)
-            Timber.d("onMapReady for ${assetId} with look back ${lookBackMinutes}")
-            val lookBackDate = Date(System.currentTimeMillis() - 60 * lookBackMinutes)
+            Timber.d("onMapReady for ${assetId} with look back ${lookBackMinutes} mins")
+            val lookBackDate = Date(System.currentTimeMillis() - 60 * lookBackMinutes * 1000)
             viewModel = MapsViewModel(appSingleton.firestore!!, assetId, lookBackDate)
             viewModel.reportList.observe(this, Observer {
                 addPins(it)
@@ -81,6 +81,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     fun addPins(pins: List<Report>) {
+        Timber.d("Received location list of size ${pins.size}")
+        if (pins.isEmpty())
+            return
+
         val options = PolylineOptions()
         options.color(Color.RED)
 
@@ -90,8 +94,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
             // Don't record too close consecutive markers (avoid unnecessary crowding)
             // 10^-5 is about 1.1m (https://en.wikipedia.org/wiki/Decimal_degrees)
-            if (Math.abs(lastLocation.latitude) > 1e-6 && Math.abs(lastLocation.longitude) > 1e-6 ||
-                Math.abs(lastLocation.latitude - latLng.latitude) < 1e-5 &&
+            if (Math.abs(lastLocation.latitude - latLng.latitude) < 1e-5 &&
                 Math.abs(lastLocation.longitude - latLng.longitude) < 1e-5)
             {
                 continue
@@ -109,11 +112,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         map.addPolyline(options)
-
-//        val cameraPosition = CameraPosition.Builder()
-//            .target(LatLng(pins[0].lat, pins[0].lon))
-//            .zoom(18f).build()
-//        map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
     }
 
     // Initializes contents of Activity's standard options menu. Only called the first time options
@@ -162,12 +160,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun setMarkerClick(map: GoogleMap) {
-        map.setOnMarkerClickListener(object : GoogleMap.OnMarkerClickListener {
-            override fun onMarkerClick(marker: Marker): Boolean {
-                marker.showInfoWindow()
-                return true
-            }
-        })
+        map.setOnMarkerClickListener { marker ->
+            marker.showInfoWindow()
+            true
+        }
     }
 
     // Checks that users have given permission
@@ -193,7 +189,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 val userLat = lastKnownLocation?.latitude ?: 37.422160
                 val userLong = lastKnownLocation?.longitude ?: -122.084270
                 val userLatLng = LatLng(userLat, userLong)
-                map.animateCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, 10f))
+                map.animateCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, 15f))
             }
         } else {
             ActivityCompat.requestPermissions(
