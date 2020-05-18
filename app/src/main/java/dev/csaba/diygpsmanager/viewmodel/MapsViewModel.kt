@@ -12,15 +12,16 @@ import dev.csaba.diygpsmanager.addTo
 import dev.csaba.diygpsmanager.data.FirestoreReportRepository
 import dev.csaba.diygpsmanager.data.IReportRepository
 import dev.csaba.diygpsmanager.data.Report
+import java.util.Date
 
 
-class MapsViewModel(firestore: FirebaseFirestore, assetId: String, lookBackMinutes: Int) : ViewModel() {
+class MapsViewModel(firestore: FirebaseFirestore, assetId: String, lookBackDate: Date) : ViewModel() {
 
     private val _reportList = MutableLiveData<List<Report>>()
     val reportList: LiveData<List<Report>>
         get() = _reportList
 
-    private var repository: IReportRepository = FirestoreReportRepository(firestore, assetId, lookBackMinutes)
+    private var repository: IReportRepository = FirestoreReportRepository(firestore, assetId, lookBackDate)
 
     private val disposable = CompositeDisposable()
 

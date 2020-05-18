@@ -27,7 +27,9 @@ import dev.csaba.diygpsmanager.ApplicationSingleton
 import dev.csaba.diygpsmanager.R
 import dev.csaba.diygpsmanager.data.Report
 import dev.csaba.diygpsmanager.viewmodel.MapsViewModel
+import timber.log.Timber
 import java.text.SimpleDateFormat
+import java.util.Date
 
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
@@ -69,7 +71,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val assetId = intent.getStringExtra("assetId")
         if (assetId != null && appSingleton.firestore != null) {
             val lookBackMinutes = intent.getIntExtra("lookBackMinutes", 10)
-            viewModel = MapsViewModel(appSingleton.firestore!!, assetId, lookBackMinutes)
+            Timber.d("onMapReady for ${assetId} with look back ${lookBackMinutes}")
+            val lookBackDate = Date(System.currentTimeMillis() - 60 * lookBackMinutes)
+            viewModel = MapsViewModel(appSingleton.firestore!!, assetId, lookBackDate)
             viewModel.reportList.observe(this, Observer {
                 addPins(it)
             })
