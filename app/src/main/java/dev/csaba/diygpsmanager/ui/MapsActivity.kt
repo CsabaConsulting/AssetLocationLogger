@@ -36,11 +36,14 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     companion object {
         private const val REQUEST_LOCATION_PERMISSION = 1
+        private const val GOOGLEPLEX_LAT = 37.422160
+        private const val GOOGLEPLEX_LON = -122.084270
     }
 
     private lateinit var map: GoogleMap
     private lateinit var viewModel: MapsViewModel
     private var isRestore = false
+    private var lastPinId = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -88,19 +91,35 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val options = PolylineOptions()
         options.color(Color.RED)
 
-        var lastLocation = LatLng(.0, .0)
+        var previousLocation = LatLng(.0, .0)
+        var pinId = ""
+        val shouldSkip = if (lastPinId.isBlank()) false else pins.any { it.id == lastPinId }
+        var found = false
+        var added = 0
         for (pin in pins) {
             val latLng = LatLng(pin.lat, pin.lon)
+            pinId = pin.id
+
+            // Looks like we receive the whole array over and over
+            // So we need to avoid adding the same pins multiple times
+            // We skip over what we already saw
+            if (shouldSkip && !found) {
+                if (pin.id == pinId) {
+                    found = true
+                }
+                continue
+            }
 
             // Don't record too close consecutive markers (avoid unnecessary crowding)
             // 10^-5 is about 1.1m (https://en.wikipedia.org/wiki/Decimal_degrees)
-            if (Math.abs(lastLocation.latitude - latLng.latitude) < 1e-5 &&
-                Math.abs(lastLocation.longitude - latLng.longitude) < 1e-5)
+            if (Math.abs(previousLocation.latitude - latLng.latitude) < 1e-5 &&
+                Math.abs(previousLocation.longitude - latLng.longitude) < 1e-5)
             {
                 continue
             }
-            lastLocation = latLng
             options.add(latLng)
+            added += 1
+            previousLocation = latLng
 
             val currentLocale = ConfigurationCompat.getLocales(resources.configuration)[0]
             val dateFormat = SimpleDateFormat("yyyy-MM-dd", currentLocale)
@@ -110,8 +129,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             val marker = MarkerOptions().position(latLng).title(timeString).snippet(dateString)
             map.addMarker(marker)
         }
+        lastPinId = pinId
 
-        map.addPolyline(options)
+        if (added > 0) {
+            map.addPolyline(options)
+        }
     }
 
     // Initializes contents of Activity's standard options menu. Only called the first time options
@@ -186,8 +208,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     locationManager.getLastKnownLocation(locationProvider)
 
                 // Default to the lattitude and longitude of the Googleplex if no location.
-                val userLat = lastKnownLocation?.latitude ?: 37.422160
-                val userLong = lastKnownLocation?.longitude ?: -122.084270
+                val userLat = lastKnownLocation?.latitude ?: GOOGLEPLEX_LAT
+                val userLong = lastKnownLocation?.longitude ?: GOOGLEPLEX_LON
                 val userLatLng = LatLng(userLat, userLong)
                 map.animateCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, 15f))
             }
