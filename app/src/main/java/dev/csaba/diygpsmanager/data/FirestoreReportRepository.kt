@@ -6,8 +6,6 @@ import com.google.firebase.firestore.Query
 import dev.csaba.diygpsmanager.data.remote.RemoteReport
 import dev.csaba.diygpsmanager.data.remote.mapDateToTimestamp
 import dev.csaba.diygpsmanager.data.remote.mapToReport
-import dev.csaba.diygpsmanager.data.remote.mapToReportData
-import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.ObservableEmitter
 import io.reactivex.Single
