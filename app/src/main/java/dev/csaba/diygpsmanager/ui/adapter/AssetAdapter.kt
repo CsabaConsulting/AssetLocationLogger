@@ -59,15 +59,17 @@ class AssetAdapter(private val assetInputListener: OnAssetInputListener?) : Recy
 
             val assetTag = assetList[position].id
             trackAsset.tag = assetTag
-            val locked = Math.abs(asset.lockLat) > 1e-6 && Math.abs(asset.lockLon) > 1e-6
             flipAssetLock.setIconResource(
-                if (locked) R.drawable.ic_lock_closed else R.drawable.ic_lock_open
+                if (asset.lock) R.drawable.ic_lock_closed else R.drawable.ic_lock_open
             )
-            val lockAssetPrefix = if (locked) "l_" else "u_"
+            val lockAssetPrefix = if (asset.lock) "l_" else "u_"
             flipAssetLock.tag = "${lockAssetPrefix}_${assetTag}"
             deleteAsset.tag = assetTag
             assetLockRadiusSeekBar.tag = "r_${assetTag}"
             assetPeriodIntervalSeekBar.tag = "i_${assetTag}"
+            statusIcon.setImageResource(
+                if (asset.lockAlert) R.drawable.ic_warning else R.drawable.ic_check_circle
+            )
         }
     }
 
