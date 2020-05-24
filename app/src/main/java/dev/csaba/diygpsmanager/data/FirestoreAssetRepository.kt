@@ -2,7 +2,6 @@ package dev.csaba.diygpsmanager.data
 
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
 import dev.csaba.diygpsmanager.data.remote.getLockUpdate
 import dev.csaba.diygpsmanager.data.remote.mapToAsset
 import dev.csaba.diygpsmanager.data.remote.mapToAssetData
