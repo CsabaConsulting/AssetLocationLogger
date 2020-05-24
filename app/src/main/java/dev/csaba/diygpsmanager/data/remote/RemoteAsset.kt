@@ -12,5 +12,5 @@ data class RemoteAsset(
     var lockRadius: Int = 0,
     var periodInterval: Int = 3600,
     var created: Timestamp = Timestamp(0, 0),
-    var updated: Timestamp = Timestamp(0, 0)
+    var updated: Timestamp = Timestamp(0, 0)  // TODO use @ServerTimestamp
 )

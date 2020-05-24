@@ -8,5 +8,5 @@ data class RemoteReport(
     var lat: Double = .0,
     var lon: Double = .0,
     var battery: Double = .0,
-    var created: Timestamp = Timestamp(0, 0)
+    var created: Timestamp = Timestamp(0, 0)  // TODO use @ServerTimestamp
 )
