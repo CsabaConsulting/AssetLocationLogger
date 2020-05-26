@@ -9,6 +9,7 @@ fun mapToReport(remoteReport: RemoteReport): Report {
         remoteReport.id,
         remoteReport.lat,
         remoteReport.lon,
+        remoteReport.speed,
         remoteReport.battery,
         remoteReport.created.toDate()
     )
@@ -19,6 +20,7 @@ fun mapToRemoteReport(report: Report): RemoteReport {
         report.id,
         report.lat,
         report.lon,
+        report.speed,
         report.battery,
         mapDateToTimestamp(report.created)
     )
@@ -28,6 +30,7 @@ fun mapToReportData(report: Report): HashMap<String, Any> {
     return hashMapOf(
         "lat" to report.lat,
         "lon" to report.lon,
+        "speed" to report.speed,
         "battery" to report.battery,
         "created" to mapDateToTimestamp(report.created)
     )

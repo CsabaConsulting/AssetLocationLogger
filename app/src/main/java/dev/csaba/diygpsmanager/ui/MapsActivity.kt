@@ -121,11 +121,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             previousLocation = latLng
 
             val currentLocale = ConfigurationCompat.getLocales(resources.configuration)[0]
-            val dateFormat = SimpleDateFormat("yyyy-MM-dd", currentLocale)
-            val dateString = dateFormat.format(pin.created)
-            val timeFormat = SimpleDateFormat("HH:mm:ss", currentLocale)
-            val timeString = timeFormat.format(pin.created)
-            val marker = MarkerOptions().position(latLng).title(timeString).snippet(dateString)
+            val dateTimeFormat = SimpleDateFormat("HH:mm:ss, yyyy-MM-dd", currentLocale)
+            val dateTimeString = dateTimeFormat.format(pin.created)
+            val title = "${pin.battery}%, ${pin.speed}"
+            val marker = MarkerOptions().position(latLng).title(title).snippet(dateTimeString)
             map.addMarker(marker)
         }
         lastPinId = pinId
