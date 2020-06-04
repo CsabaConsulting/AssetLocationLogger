@@ -36,7 +36,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
                     requireView(),
                     getString(R.string.uncofigured_firestore),
                     Snackbar.LENGTH_INDEFINITE
-                ).setAction(getString(R.string.acknowledge)) {
+                ).setAction(R.string.acknowledge) {
                     Timber.d(getString(R.string.uncofigured_firestore))
                 }.show()
             } else {
