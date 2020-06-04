@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
 import dev.csaba.diygpsmanager.R
 import dev.csaba.diygpsmanager.data.hasAuthConfiguration
+import timber.log.Timber
 
 abstract class AppCompatActivityWithActionBar : AppCompatActivity() {
 
@@ -27,8 +28,10 @@ abstract class AppCompatActivityWithActionBar : AppCompatActivity() {
                 Snackbar.make(
                     window.decorView.rootView,
                     getString(R.string.uncofigured_firestore),
-                    Snackbar.LENGTH_SHORT
-                ).show()
+                    Snackbar.LENGTH_INDEFINITE
+                ).setAction(getString(R.string.acknowledge)) {
+                    Timber.d(getString(R.string.uncofigured_firestore))
+                }.show()
             } else {
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)

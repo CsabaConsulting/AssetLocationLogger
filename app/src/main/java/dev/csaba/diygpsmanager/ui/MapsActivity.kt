@@ -194,6 +194,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     // Checks if users have given their location and sets location enabled if so.
+    @SuppressLint("MissingPermission")
     private fun enableMyLocation() {
         if (isPermissionGranted()) {
             map.isMyLocationEnabled = true

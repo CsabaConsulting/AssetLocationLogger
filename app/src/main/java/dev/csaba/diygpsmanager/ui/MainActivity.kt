@@ -100,8 +100,10 @@ class MainActivity : AppCompatActivityWithActionBar(), OnAssetInputListener {
                             Snackbar.make(
                                 window.decorView.rootView,
                                 applicationContext.getString(R.string.authentication_failed),
-                                Snackbar.LENGTH_SHORT
-                            ).show()
+                                Snackbar.LENGTH_INDEFINITE
+                            ).setAction(getString(R.string.acknowledge)) {
+                                Timber.d(getString(R.string.authentication_failed))
+                            }.show()
                         }
                     }
             } else {
@@ -115,8 +117,10 @@ class MainActivity : AppCompatActivityWithActionBar(), OnAssetInputListener {
                             Snackbar.make(
                                 window.decorView.rootView,
                                 applicationContext.getString(R.string.authentication_failed),
-                                Snackbar.LENGTH_SHORT
-                            ).show()
+                                Snackbar.LENGTH_INDEFINITE
+                            ).setAction(getString(R.string.acknowledge)) {
+                                Timber.d(getString(R.string.authentication_failed))
+                            }.show()
                         }
                     }
             }
@@ -158,8 +162,10 @@ class MainActivity : AppCompatActivityWithActionBar(), OnAssetInputListener {
                     Snackbar.make(
                         window.decorView.rootView,
                         applicationContext.getString(R.string.authentication_failed),
-                        Snackbar.LENGTH_SHORT
-                    ).show()
+                        Snackbar.LENGTH_INDEFINITE
+                    ).setAction(getString(R.string.acknowledge)) {
+                        Timber.d(getString(R.string.authentication_failed))
+                    }.show()
                 }
             }
     }
