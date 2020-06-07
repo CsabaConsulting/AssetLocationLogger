@@ -80,6 +80,7 @@ fun getLockUpdate(lockState: Boolean): HashMap<String, Any> {
         "lock" to lockState,
         "lockLat" to .0,
         "lockLon" to .0,
+        "lockAlert" to false,
         "updated" to mapDateToTimestamp(Date())
     )
 }
