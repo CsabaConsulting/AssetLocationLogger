@@ -110,11 +110,11 @@ class FirestoreAssetRepository(secondaryDB: FirebaseFirestore) : IAssetRepositor
         }
     }
 
-    override fun flipAssetLockState(assetId: String, lockState: Boolean): Completable {
+    override fun setAssetLockState(assetId: String, lockState: Boolean): Completable {
         return Completable.create { emitter ->
             remoteDB.collection(ASSET_COLLECTION)
                 .document(assetId)
-                .update(getLockUpdate(!lockState))
+                .update(getLockUpdate(lockState))
                 .addOnSuccessListener {
                     Timber.d("Unlocked!")
                     if (!emitter.isDisposed) {

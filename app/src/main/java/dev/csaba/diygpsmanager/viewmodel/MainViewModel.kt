@@ -59,8 +59,8 @@ class MainViewModel(firestore: FirebaseFirestore) : ViewModel() {
             .addTo(disposable)
     }
 
-    fun flipAssetLockState(assetId: String, lockState: Boolean) {
-        repository.flipAssetLockState(assetId, lockState)
+    fun setAssetLockState(assetId: String, lockState: Boolean) {
+        repository.setAssetLockState(assetId, lockState)
             .subscribeOn(Schedulers.io())
             .subscribe(
                 {},

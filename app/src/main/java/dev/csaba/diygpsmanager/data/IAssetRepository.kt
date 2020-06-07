@@ -11,7 +11,7 @@ interface IAssetRepository {
 
     fun addAsset(asset: Asset): Completable
     fun deleteAsset(assetId: String): Completable
-    fun flipAssetLockState(assetId: String, lockState: Boolean): Completable
+    fun setAssetLockState(assetId: String, lockState: Boolean): Completable
     fun setAssetLockRadius(assetId: String, lockRadius: Int): Completable
     fun setAssetPeriodInterval(assetId: String, periodIntervalProgress: Int): Completable
 

@@ -31,7 +31,8 @@ class AssetAdapter(private val assetInputListener: OnAssetInputListener?) : Recy
         view.flipAssetLock.setOnClickListener {
             button -> assetInputListener?.run {
                 val assetParts = (button.tag as String).split("_")
-                this.onFlipAssetLockClick(assetParts[1], assetParts[0] == "l")
+                val currentlyLocked = assetParts[0] == "l"
+                this.onFlipAssetLockClick(assetParts[1], !currentlyLocked)
             }
         }
         view.deleteAsset.setOnClickListener {
@@ -62,7 +63,7 @@ class AssetAdapter(private val assetInputListener: OnAssetInputListener?) : Recy
             flipAssetLock.setIconResource(
                 if (asset.lock) R.drawable.ic_lock_closed else R.drawable.ic_lock_open
             )
-            val lockAssetPrefix = if (asset.lock) "l_" else "u_"
+            val lockAssetPrefix = if (asset.lock) "l" else "u"
             flipAssetLock.tag = "${lockAssetPrefix}_${assetTag}"
             deleteAsset.tag = assetTag
             assetLockRadiusSeekBar.tag = "r_${assetTag}"
