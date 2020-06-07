@@ -50,7 +50,8 @@ class FirestoreReportRepository(secondaryDB: FirebaseFirestore, assetId: String,
         }
     }
 
-    private fun mapDocumentToRemoteReport(document: DocumentSnapshot) = document.toObject(RemoteReport::class.java)!!.apply { id = document.id }
+    private fun mapDocumentToRemoteReport(document: DocumentSnapshot) =
+        document.toObject(RemoteReport::class.java)!!.apply { id = document.id }
 
     override fun getAllReports(): Single<List<Report>> {
         return Single.create<List<DocumentSnapshot>> { emitter ->
