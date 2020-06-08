@@ -10,14 +10,17 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.FirebaseApp
 import com.google.firebase.FirebaseOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
+import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.ktx.app
 import com.google.firebase.ktx.initialize
+import com.google.firebase.messaging.FirebaseMessaging
 import dev.csaba.diygpsmanager.ApplicationSingleton
 import dev.csaba.diygpsmanager.R
 import dev.csaba.diygpsmanager.data.getSecondaryFirebaseConfiguration
@@ -26,6 +29,7 @@ import dev.csaba.diygpsmanager.ui.adapter.OnAssetInputListener
 import dev.csaba.diygpsmanager.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import timber.log.Timber
+import java.lang.reflect.Method
 
 
 class MainActivity : AppCompatActivityWithActionBar(), OnAssetInputListener {
@@ -33,6 +37,7 @@ class MainActivity : AppCompatActivityWithActionBar(), OnAssetInputListener {
     companion object {
         private const val SECONDARY_NAME = "secondary"
         private const val RC_SIGN_IN = 9001
+        private const val GEO_FENCE_TOPIC = "geo_fence_exited"
     }
 
     private lateinit var viewModel: MainViewModel
@@ -60,6 +65,28 @@ class MainActivity : AppCompatActivityWithActionBar(), OnAssetInputListener {
             Firebase.initialize(applicationContext, options, SECONDARY_NAME)
             appSingleton.firebaseApp = Firebase.app(SECONDARY_NAME)
         }
+
+        val getInstance2: Method =
+            FirebaseMessaging::class.java.getDeclaredMethod("getInstance", FirebaseApp::class.javaObjectType)
+        getInstance2.setAccessible(true)  // if security settings allow this
+        // FirebaseMessaging.getInstance(appSingleton.firebaseApp!!)
+        // null is for static methods
+        val firebaseMessaging: FirebaseMessaging =
+            getInstance2.invoke(null, appSingleton.firebaseApp!!) as FirebaseMessaging
+        firebaseMessaging.subscribeToTopic(GEO_FENCE_TOPIC)
+            .addOnCompleteListener { task ->
+                if (!task.isSuccessful) {
+                    Timber.d("Could not subscribe to topic ${GEO_FENCE_TOPIC}")
+                } else {
+                    Timber.d("Subscribed to topic ${GEO_FENCE_TOPIC}")
+                }
+            }
+
+        FirebaseInstanceId.getInstance(appSingleton.firebaseApp!!).instanceId
+            .addOnSuccessListener(this@MainActivity) { instanceIdResult ->
+                val messagingToken = instanceIdResult.token
+                Timber.d("Got FCM token $messagingToken")
+            }
 
         // Get FireStore for the secondary app.
         if (appSingleton.firestore == null) {
