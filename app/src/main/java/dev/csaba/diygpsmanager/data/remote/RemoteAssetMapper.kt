@@ -72,18 +72,21 @@ fun mapToPeriodIntervalUpdate(periodIntervalProgress: Int): HashMap<String, Any>
 }
 
 fun getLockUpdate(lockState: Boolean): HashMap<String, Any> {
-    if (lockState)
-        return hashMapOf(
-            "lock" to lockState,
-            "updated" to mapDateToTimestamp(Date())
-        )
-
-    return hashMapOf(
+    val updateMap: HashMap<String, Any> = hashMapOf(
         "lock" to lockState,
-        "lockLat" to .0,
-        "lockLon" to .0,
-        "lockAlert" to false,
-        "lockManualAlert" to false,
         "updated" to mapDateToTimestamp(Date())
     )
+    if (!lockState) {
+        // When clearing the lock clear the alerts and lock location as well
+        updateMap.putAll(
+            hashMapOf(
+                "lockLat" to .0,
+                "lockLon" to .0,
+                "lockAlert" to false,
+                "lockManualAlert" to false
+            )
+        )
+    }
+
+    return updateMap
 }
