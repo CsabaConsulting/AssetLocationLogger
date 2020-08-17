@@ -7,13 +7,16 @@ import android.os.Bundle
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.google.android.material.snackbar.Snackbar
-import dev.csaba.diygpsmanager.R
+import dev.csaba.diygpsmanager.data.EncryptedPreferenceDataStore
 import dev.csaba.diygpsmanager.data.hasAuthConfiguration
+import dev.csaba.diygpsmanager.R
 import timber.log.Timber
 
 
 class SettingsFragment : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+        preferenceManager.preferenceDataStore =
+            EncryptedPreferenceDataStore.getInstance(requireContext())
         setPreferencesFromResource(R.xml.preferences, rootKey)
     }
 
