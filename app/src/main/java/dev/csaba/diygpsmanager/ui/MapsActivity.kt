@@ -76,7 +76,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             Timber.d("onMapReady for ${assetId} with look back ${lookBackMinutes} mins")
             val lookBackDate = Date(System.currentTimeMillis() - 60 * lookBackMinutes * 1000)
             viewModel = MapsViewModel(appSingleton.firestore!!, assetId, lookBackDate)
-            viewModel.reportList.observe(this, Observer {
+            viewModel.reportList.observe(this, {
                 addPins(it)
             })
         }

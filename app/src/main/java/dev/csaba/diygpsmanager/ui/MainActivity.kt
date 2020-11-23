@@ -200,7 +200,7 @@ class MainActivity : AppCompatActivityWithActionBar(), OnAssetInputListener {
     private fun populateViewModel(firestore: FirebaseFirestore) {
         viewModel = MainViewModel(firestore)
 
-        viewModel.assetList.observe(this, Observer {
+        viewModel.assetList.observe(this, {
             assetAdapter.setItems(it)
         })
 
