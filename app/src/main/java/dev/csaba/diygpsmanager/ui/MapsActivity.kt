@@ -73,7 +73,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val assetId = intent.getStringExtra("assetId")
         if (assetId != null && appSingleton.firestore != null) {
             val lookBackMinutes = intent.getIntExtra("lookBackMinutes", 10)
-            Timber.d("onMapReady for ${assetId} with look back ${lookBackMinutes} mins")
+            Timber.d("onMapReady for $assetId with look back $lookBackMinutes mins")
             val lookBackDate = Date(System.currentTimeMillis() - 60 * lookBackMinutes * 1000)
             viewModel = MapsViewModel(appSingleton.firestore!!, assetId, lookBackDate)
             viewModel.reportList.observe(this, {

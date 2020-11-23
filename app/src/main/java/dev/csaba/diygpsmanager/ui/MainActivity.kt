@@ -76,9 +76,9 @@ class MainActivity : AppCompatActivityWithActionBar(), OnAssetInputListener {
         firebaseMessaging.subscribeToTopic(GEO_FENCE_TOPIC)
             .addOnCompleteListener { task ->
                 if (!task.isSuccessful) {
-                    Timber.d("Could not subscribe to topic ${GEO_FENCE_TOPIC}")
+                    Timber.d("Could not subscribe to topic $GEO_FENCE_TOPIC")
                 } else {
-                    Timber.d("Subscribed to topic ${GEO_FENCE_TOPIC}")
+                    Timber.d("Subscribed to topic $GEO_FENCE_TOPIC")
                 }
             }
 
