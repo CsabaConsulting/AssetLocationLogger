@@ -17,6 +17,7 @@ fun mapToAsset(remoteAsset: RemoteAsset): Asset {
         remoteAsset.lockAlert,
         remoteAsset.lockManualAlert,
         remoteAsset.periodInterval,
+        remoteAsset.thresholdTemperature,
         remoteAsset.created.toDate(),
         remoteAsset.updated.toDate()
     )
@@ -36,6 +37,7 @@ fun mapToAssetData(asset: Asset): HashMap<String, Any> {
         "lockAlert" to asset.lockAlert,
         "lockManualAlert" to asset.lockManualAlert,
         "periodInterval" to asset.periodInterval,
+        "thresholdTemperature" to asset.thresholdTemperature,
         "created" to mapDateToTimestamp(asset.created),
         "updated" to mapDateToTimestamp(asset.updated)
     )
@@ -67,6 +69,13 @@ fun mapPeriodIntervalProgressToSeconds(periodIntervalProgress: Int): Int {
 fun mapToPeriodIntervalUpdate(periodIntervalProgress: Int): HashMap<String, Any> {
     return hashMapOf(
         "periodInterval" to mapPeriodIntervalProgressToSeconds(periodIntervalProgress),
+        "updated" to mapDateToTimestamp(Date())
+    )
+}
+
+fun mapToThresholdTemperatureUpdate(thresholdTemperature: Float): HashMap<String, Any> {
+    return hashMapOf(
+        "thresholdTemperature" to thresholdTemperature,
         "updated" to mapDateToTimestamp(Date())
     )
 }

@@ -11,6 +11,7 @@ fun mapToReport(remoteReport: RemoteReport): Report {
         remoteReport.lon,
         remoteReport.speed,
         remoteReport.battery,
+        remoteReport.temperature,
         remoteReport.created.toDate()
     )
 }
@@ -22,6 +23,7 @@ fun mapToRemoteReport(report: Report): RemoteReport {
         report.lon,
         report.speed,
         report.battery,
+        report.temperature,
         mapDateToTimestamp(report.created)
     )
 }
@@ -32,6 +34,7 @@ fun mapToReportData(report: Report): HashMap<String, Any> {
         "lon" to report.lon,
         "speed" to report.speed,
         "battery" to report.battery,
+        "temperature" to report.temperature,
         "created" to mapDateToTimestamp(report.created)
     )
 }

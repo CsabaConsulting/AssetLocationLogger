@@ -9,5 +9,6 @@ data class Report(
     var lon: Double = .0,
     var speed: Float = .0f,
     var battery: Int = 0,
+    var temperature: Float = .0f,
     var created: Date = Date()
 )

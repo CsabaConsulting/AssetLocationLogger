@@ -14,6 +14,7 @@ interface IAssetRepository {
     fun setAssetLockState(assetId: String, lockState: Boolean): Completable
     fun setAssetLockRadius(assetId: String, lockRadius: Int): Completable
     fun setAssetPeriodInterval(assetId: String, periodIntervalProgress: Int): Completable
+    fun setAssetThresholdTemperature(assetId: String, thresholdTemperature: Float): Completable
 
     fun getChangeObservable(): Observable<List<Asset>>
 }

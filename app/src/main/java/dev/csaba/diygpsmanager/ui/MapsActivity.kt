@@ -14,7 +14,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.os.ConfigurationCompat
-import androidx.lifecycle.Observer
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -34,7 +33,7 @@ import java.util.Date
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     companion object {
-        private const val REQUEST_LOCATION_PERMISSION = 1
+        private const val REQUEST_LOCATION_PERMISSION = 111
         private const val GOOGLEPLEX_LAT = 37.422160
         private const val GOOGLEPLEX_LON = -122.084270
     }
@@ -227,10 +226,14 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,
-        grantResults: IntArray) {
+        grantResults: IntArray)
+    {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         // Check if location permissions are granted and if so enable the
         // location data layer.
-        if (requestCode == REQUEST_LOCATION_PERMISSION) {
+        if (requestCode == REQUEST_LOCATION_PERMISSION ||
+            requestCode == REQUEST_LOCATION_PERMISSION + 65536)
+        {
             if (grantResults.contains(PackageManager.PERMISSION_GRANTED)) {
                 enableMyLocation()
             }

@@ -2,12 +2,7 @@ package dev.csaba.diygpsmanager.data
 
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
-import dev.csaba.diygpsmanager.data.remote.getLockUpdate
-import dev.csaba.diygpsmanager.data.remote.mapToAsset
-import dev.csaba.diygpsmanager.data.remote.mapToAssetData
-import dev.csaba.diygpsmanager.data.remote.mapToLockRadiusUpdate
-import dev.csaba.diygpsmanager.data.remote.mapToPeriodIntervalUpdate
-import dev.csaba.diygpsmanager.data.remote.RemoteAsset
+import dev.csaba.diygpsmanager.data.remote.*
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.ObservableEmitter
@@ -154,6 +149,24 @@ class FirestoreAssetRepository(secondaryDB: FirebaseFirestore) : IAssetRepositor
             remoteDB.collection(ASSET_COLLECTION)
                 .document(assetId)
                 .update(mapToPeriodIntervalUpdate(periodIntervalProgress))
+                .addOnSuccessListener {
+                    if (!emitter.isDisposed) {
+                        emitter.onComplete()
+                    }
+                }
+                .addOnFailureListener {
+                    if (!emitter.isDisposed) {
+                        emitter.onError(it)
+                    }
+                }
+        }
+    }
+
+    override fun setAssetThresholdTemperature(assetId: String, thresholdTemperature: Float): Completable {
+        return Completable.create { emitter ->
+            remoteDB.collection(ASSET_COLLECTION)
+                .document(assetId)
+                .update(mapToThresholdTemperatureUpdate(thresholdTemperature))
                 .addOnSuccessListener {
                     if (!emitter.isDisposed) {
                         emitter.onComplete()
