@@ -9,6 +9,7 @@ import dev.csaba.diygpsmanager.R
 import dev.csaba.diygpsmanager.data.hasAuthConfiguration
 import timber.log.Timber
 
+
 abstract class AppCompatActivityWithActionBar : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
