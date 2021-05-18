@@ -29,7 +29,7 @@
     <string name="home_page_url">https://diygpstracker.github.io/</string>
     <string name="privacy_policy_url">https://diygpstracker.github.io/privacy/</string>
     <string name="authentication_failed">Authentication failed.</string>
-    <string name="uncofigured_firestore">Firestore not configured. Please specify all necessary data.</string>
+    <string name="unconfigured_firestore">Firestore not configured. Please specify all necessary data.</string>
     <string name="asset_button_title">Asset List</string>
     <string name="normal_map">Normal Map</string>
     <string name="hybrid_map">Hybrid Map</string>
