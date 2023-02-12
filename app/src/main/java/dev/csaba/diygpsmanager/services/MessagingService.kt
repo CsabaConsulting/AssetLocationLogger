@@ -8,14 +8,13 @@ import android.content.Intent
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.media.RingtoneManager
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import dev.csaba.diygpsmanager.R
 import dev.csaba.diygpsmanager.ui.MainActivity
 import kotlin.random.Random
+import timber.log.Timber
 
 
 class MessagingService : FirebaseMessagingService() {
@@ -25,8 +24,19 @@ class MessagingService : FirebaseMessagingService() {
         private const val CHANNEL_DESCRIPTION = "Tracker to Manager notification"
     }
 
+    /**
+     * Called if the FCM registration token is updated. This may occur if the security of
+     * the previous token had been compromised. Note that this is called when the
+     * FCM registration token is initially generated so this is where you would retrieve the token.
+     */
     override fun onNewToken(token: String) {
+        Timber.d("Refreshed token: $token")
         super.onNewToken(token)
+
+        // If you want to send messages to this application instance or
+        // manage this apps subscriptions on the server side, send the
+        // FCM registration token to your app server.
+        // sendRegistrationToServer(token)
     }
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
@@ -35,13 +45,7 @@ class MessagingService : FirebaseMessagingService() {
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val notificationID = Random.nextInt(3000)
 
-        /*
-         Apps targeting SDK 26 or above (Android O) must implement notification channels and add its notifications
-         to at least one of them. Therefore, confirm if version is Oreo or higher, then setup notification channel
-        */
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-          setupChannels(notificationManager)
-        }
+        setupChannels(notificationManager)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         val pendingIntent = PendingIntent.getActivity(
             this, 0, intent,
@@ -69,7 +73,6 @@ class MessagingService : FirebaseMessagingService() {
         notificationManager.notify(notificationID, notificationBuilder.build())
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     private fun setupChannels(notificationManager: NotificationManager?) {
         val adminChannel = NotificationChannel(
             GEO_FENCE_CHANNEL_ID,
@@ -83,4 +86,5 @@ class MessagingService : FirebaseMessagingService() {
         adminChannel.enableVibration(true)
         notificationManager?.createNotificationChannel(adminChannel)
     }
+
 }

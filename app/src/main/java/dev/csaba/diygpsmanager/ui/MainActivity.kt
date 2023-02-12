@@ -9,6 +9,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.FirebaseApp
 import com.google.firebase.FirebaseOptions
@@ -16,7 +17,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
-import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.ktx.app
 import com.google.firebase.ktx.initialize
@@ -68,7 +68,7 @@ class MainActivity : AppCompatActivityWithActionBar(), OnAssetInputListener {
 
         val getInstance2: Method =
             FirebaseMessaging::class.java.getDeclaredMethod("getInstance", FirebaseApp::class.javaObjectType)
-        getInstance2.setAccessible(true)  // if security settings allow this
+        getInstance2.isAccessible = true  // if security settings allow this
         // FirebaseMessaging.getInstance(appSingleton.firebaseApp!!)
         // null is for static methods
         val firebaseMessaging: FirebaseMessaging =
@@ -82,11 +82,24 @@ class MainActivity : AppCompatActivityWithActionBar(), OnAssetInputListener {
                 }
             }
 
-        FirebaseInstanceId.getInstance(appSingleton.firebaseApp!!).instanceId
-            .addOnSuccessListener(this@MainActivity) { instanceIdResult ->
-                val messagingToken = instanceIdResult.token
-                Timber.d("Got FCM token $messagingToken")
+        firebaseMessaging.token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Timber.e(task.exception, "Fetching FCM registration token failed")
+                return@OnCompleteListener
             }
+
+            // Get new FCM registration token
+            val messagingToken = task.result
+
+            // Log and toast
+            val fenceExitedMessage = applicationContext.getString(R.string.geo_fence_exited)
+            Timber.d(fenceExitedMessage)
+            Snackbar.make(
+                window.decorView.rootView,
+                fenceExitedMessage,
+                Snackbar.LENGTH_LONG
+            ).show()
+        })
 
         // Get FireStore for the secondary app.
         if (appSingleton.firestore == null) {
@@ -156,6 +169,7 @@ class MainActivity : AppCompatActivityWithActionBar(), OnAssetInputListener {
         }
     }
 
+    @Deprecated("Deprecated in Java")
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 

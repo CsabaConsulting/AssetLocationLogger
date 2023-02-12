@@ -29,6 +29,10 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="@string/geo_fence_channel_id" />
+
         <!-- Set custom default icon. This is used when no icon is set for incoming notification messages.
              See README(https://goo.gl/l4GJaQ) for more. -->
         <meta-data
@@ -40,7 +44,7 @@
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorAccent" />
 
-        <activity android:name=".ui.StagingActivity">
+        <activity android:name=".ui.StagingActivity" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -48,7 +52,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.SettingsActivity">
+        <activity android:name=".ui.SettingsActivity" android:exported="true">
             <intent-filter>
                 <action android:name="android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS" />
                 <category android:name="android.intent.category.PREFERENCE" />
@@ -59,7 +63,9 @@
 
         <service
             android:name=".services.MessagingService"
-            android:permission="com.google.android.c2dm.permission.SEND">
+            android:permission="com.google.android.c2dm.permission.SEND"
+            android:exported="false"
+            android:stopWithTask="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
